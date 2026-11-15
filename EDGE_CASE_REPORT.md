@@ -2,11 +2,12 @@
 
 This project adds statistics functions to SPARQL (query language for graph data): correlation, covariance, percentile, probability, chi-squared, and related helpers.
 
-Earlier tests mostly copied the same happy-path pattern. We added **edge-case** coverage in four agenda points, with small handmade datasets in [`custom-data/`](custom-data/) plus a few tests on real fixtures ([`cars.ttl`](src/test/resources/cars.ttl), [`cities.ttl`](src/test/resources/cities.ttl)).
+Earlier tests mostly copied the same happy-path pattern. We added **edge-case** coverage in four agenda points, with small handmade datasets (TTL under [`src/test/resources/custom-data/`](src/test/resources/custom-data/), table views under [`custom-data/`](custom-data/)) plus a few tests on real fixtures ([`cars.ttl`](src/test/resources/cars.ttl), [`cities.ttl`](src/test/resources/cities.ttl)).
 
 All of this lives mainly in:
 
-- Datasets: [`custom-data/`](custom-data/) (`edge_*.ttl`)
+- Table views: [`custom-data/`](custom-data/)
+- TTL sources: [`src/test/resources/custom-data/`](src/test/resources/custom-data/)
 - Tests: [`EdgeCaseTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/EdgeCaseTest.java)
 - Helpers: [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, unbound checks)
 
@@ -30,11 +31,11 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 
 | File | Agenda | Role |
 |------|--------|------|
-| [`edge_pairs.ttl`](custom-data/edge_pairs.ttl) | #1 | Students with `math` / `english`; some missing one or both |
-| [`edge_chi.ttl`](custom-data/edge_chi.ttl) | #1 | Tiny gender×order table with incomplete people |
-| [`edge_tiny.ttl`](custom-data/edge_tiny.ttl) | #2 | Degenerate sizes via `ex:case` |
-| [`edge_groups.ttl`](custom-data/edge_groups.ttl) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
-| [`edge_dirty.ttl`](custom-data/edge_dirty.ttl) | #4 | Dirty / weird typed values |
+| [`edge_pairs`](custom-data/edge_pairs.md) | #1 | Students with `math` / `english`; some missing one or both |
+| [`edge_chi`](custom-data/edge_chi.md) | #1 | Tiny gender×order table with incomplete people |
+| [`edge_tiny`](custom-data/edge_tiny.md) | #2 | Degenerate sizes via `ex:case` |
+| [`edge_groups`](custom-data/edge_groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
+| [`edge_dirty`](custom-data/edge_dirty.md) | #4 | Dirty / weird typed values |
 
 ---
 
@@ -70,7 +71,7 @@ Incomplete pair case (alice+bob, OPTIONAL english): **empty correlation**, not a
 
 Almost no data — too few points or no spread for correlation.
 
-### Dataset: [`edge_tiny.ttl`](custom-data/edge_tiny.ttl)
+### Dataset: [`edge_tiny`](custom-data/edge_tiny.md)
 
 | Case | Meaning |
 |------|---------|
@@ -94,7 +95,7 @@ Almost no data — too few points or no spread for correlation.
 
 ## Agenda #3 — Richer queries
 
-### Dataset: [`edge_groups.ttl`](custom-data/edge_groups.ttl)
+### Dataset: [`edge_groups`](custom-data/edge_groups.md)
 
 | Group | Content |
 |-------|---------|
@@ -113,7 +114,7 @@ Almost no data — too few points or no spread for correlation.
 
 ## Agenda #4 — Dirty / weird values
 
-### Dataset: [`edge_dirty.ttl`](custom-data/edge_dirty.ttl)
+### Dataset: [`edge_dirty`](custom-data/edge_dirty.md)
 
 | Test idea | Result |
 |-----------|--------|
@@ -131,12 +132,8 @@ Almost no data — too few points or no spread for correlation.
 ## Code map
 
 ```
-custom-data/
-  edge_pairs.ttl    #1 nulls (students)
-  edge_chi.ttl      #1 chi_sq gaps
-  edge_tiny.ttl     #2 tiny / empty
-  edge_groups.ttl   #3 GROUP BY
-  edge_dirty.ttl    #4 dirty values
+custom-data/*.md                      # table views (docs)
+src/test/resources/custom-data/*.ttl  # TTL sources (tests)
 
 src/test/java/.../EdgeCaseTest.java
   optional* / required*     → #1 handmade

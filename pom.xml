@@ -56,15 +56,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-            <testResource>
-                <directory>custom-data</directory>
-                <targetPath>custom-data</targetPath>
-            </testResource>
-        </testResources>
-    </build>
 </project>

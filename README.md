@@ -12,7 +12,7 @@
 
 For a deep dive into edge-case findings, see **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)**.
 
-Handmade edge fixtures live in **[`custom-data/`](custom-data/)** (see [table below](#71-custom-data-handmade-edge-fixtures)).
+Handmade edge fixtures: **TTL sources** in [`src/test/resources/custom-data/`](src/test/resources/custom-data/), **table views** in [`custom-data/`](custom-data/) (see [§7.1](#71-custom-data-handmade-edge-fixtures)).
 
 ---
 
@@ -129,7 +129,7 @@ Factories are registered via Java SPI under:
 more-tests/
 ├── README.md
 ├── EDGE_CASE_REPORT.md
-├── custom-data/              ← handmade edge fixtures (see §7.1)
+├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
 ├── pom.xml
 └── src/
     ├── main/java/.../statistics_rdf4j/
@@ -143,10 +143,10 @@ more-tests/
     ├── main/resources/META-INF/services/
     └── test/
         ├── java/.../EdgeCaseTest.java, PearsonTest.java, …
-        └── resources/          ← natural DBpedia-style TTLs
+        └── resources/
+            ├── *.ttl                    ← natural DBpedia-style fixtures
+            └── custom-data/*.ttl        ← handmade edge TTL sources
 ```
-
-Maven copies [`custom-data/`](custom-data/) onto the test classpath as `custom-data/*` (see [`pom.xml`](pom.xml) `testResources`).
 
 ---
 
@@ -181,17 +181,18 @@ Numeric conversion goes through `CollectorUtil.asDouble`. Bad or unbound values 
 
 ### 7.1 Custom data (handmade edge fixtures)
 
-All purpose-built edge datasets are in [`custom-data/`](custom-data/):
+- **Table views** (linked below): [`custom-data/`](custom-data/)
+- **TTL sources** (used by tests): [`src/test/resources/custom-data/`](src/test/resources/custom-data/)
 
-| File | Agenda | Purpose |
-|------|--------|---------|
-| [`edge_pairs.ttl`](custom-data/edge_pairs.ttl) | #1 | Students with `math` / `english`; one-sided and both-missing rows (incomplete-pair / “null” case) |
-| [`edge_chi.ttl`](custom-data/edge_chi.ttl) | #1 | Tiny gender × order table plus incomplete persons for `chi_sq` |
-| [`edge_tiny.ttl`](custom-data/edge_tiny.ttl) | #2 | `ex:case` slices: empty / single / identical / constantX / two |
-| [`edge_groups.ttl`](custom-data/edge_groups.ttl) | #3 | Groups A–D for `GROUP BY`, empty `FILTER`, multi-aggregate |
-| [`edge_dirty.ttl`](custom-data/edge_dirty.ttl) | #4 | Strings-as-numbers, mixed types, flags, duplicates, empty condition |
+| Table view | Agenda | Purpose |
+|------------|--------|---------|
+| [`edge_pairs`](custom-data/edge_pairs.md) | #1 | Students with `math` / `english`; one-sided and both-missing rows (incomplete-pair / “null” case) |
+| [`edge_chi`](custom-data/edge_chi.md) | #1 | Tiny gender × order table plus incomplete persons for `chi_sq` |
+| [`edge_tiny`](custom-data/edge_tiny.md) | #2 | `ex:case` slices: empty / single / identical / constantX / two |
+| [`edge_groups`](custom-data/edge_groups.md) | #3 | Groups A–D for `GROUP BY`, empty `FILTER`, multi-aggregate |
+| [`edge_dirty`](custom-data/edge_dirty.md) | #4 | Strings-as-numbers, mixed types, flags, duplicates, empty condition |
 
-In tests, load them as classpath paths, e.g. `"custom-data/edge_pairs.ttl"`.
+In tests, load the TTL classpath paths, e.g. `"custom-data/edge_pairs.ttl"`.
 
 ### 7.2 Natural / DBpedia-style fixtures
 
@@ -241,20 +242,20 @@ Full narrative: **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)**.
 
 **Question:** What if we force missing values into the aggregate with `OPTIONAL`?
 
-**Example:** correlate math `[0, 1]` with english missing ([`edge_pairs.ttl`](custom-data/edge_pairs.ttl) alice & bob).
+**Example:** correlate math `[0, 1]` with english missing ([`edge_pairs`](custom-data/edge_pairs.md) alice & bob).
 
 | Behavior | Result |
 |----------|--------|
 | Most numeric aggregates + unbound arg | **Unbound** answer (empty) |
 | One unbound row in a mixed group | **Poisons** the whole group |
 | Required patterns | Incompletes **dropped**; known floats on the complete subset |
-| `chi_sq` + OPTIONAL ([`edge_chi.ttl`](custom-data/edge_chi.ttl)) | Still returns a **number** |
+| `chi_sq` + OPTIONAL ([`edge_chi`](custom-data/edge_chi.md)) | Still returns a **number** |
 
 Also covered on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl) via `EDGE_*`.
 
 ### Agenda #2 — Tiny / empty groups
 
-Dataset: [`edge_tiny.ttl`](custom-data/edge_tiny.ttl).
+Dataset: [`edge_tiny`](custom-data/edge_tiny.md).
 
 | Slice | pearson | covariance | notes |
 |-------|---------|------------|--------|
@@ -265,7 +266,7 @@ Dataset: [`edge_tiny.ttl`](custom-data/edge_tiny.ttl).
 
 ### Agenda #3 — Richer queries
 
-Dataset: [`edge_groups.ttl`](custom-data/edge_groups.ttl).
+Dataset: [`edge_groups`](custom-data/edge_groups.md).
 
 1. **`GROUP BY ?g`** with pearson + `COUNT(*)` — A→1.0, B/C→NaN, D absent  
 2. **`FILTER` that removes all rows** — pearson → NaN  
@@ -273,7 +274,7 @@ Dataset: [`edge_groups.ttl`](custom-data/edge_groups.ttl).
 
 ### Agenda #4 — Dirty / weird values
 
-Dataset: [`edge_dirty.ttl`](custom-data/edge_dirty.ttl).
+Dataset: [`edge_dirty`](custom-data/edge_dirty.md).
 
 | Input | Observed |
 |-------|----------|
@@ -333,7 +334,7 @@ assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
 
 ### Tips
 
-1. Prefer a new file under [`custom-data/`](custom-data/) for a controlled shape.
+1. Prefer a new TTL under [`src/test/resources/custom-data/`](src/test/resources/custom-data/) (and a matching table in [`custom-data/`](custom-data/)).
 2. Reuse natural TTLs with an `EDGE_` name when the mess already exists.
 3. Lock expecteds to **observed** behavior.
 4. Compute expected floats independently on tiny sets.
@@ -359,5 +360,6 @@ This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMi
 | Doc | Contents |
 |-----|----------|
 | [EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md) | Full write-up of agendas #1–#4 |
-| [custom-data/](custom-data/) | Handmade edge TTL fixtures |
+| [custom-data/](custom-data/) | Table views of handmade edge fixtures |
+| [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |
 | [README.md](README.md) | This overview |
