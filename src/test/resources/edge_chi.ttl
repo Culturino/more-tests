@@ -1,0 +1,14 @@
+@prefix ex: <http://example.org/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Tiny categorical fixture for chi_sq OPTIONAL / missing-value edges.
+
+ex:PersonA a ex:Person ; rdfs:label "A" ; ex:gender "Male" ; ex:order "Chocolate" .
+ex:PersonB a ex:Person ; rdfs:label "B" ; ex:gender "Male" ; ex:order "Vanilla" .
+ex:PersonC a ex:Person ; rdfs:label "C" ; ex:gender "Female" ; ex:order "Chocolate" .
+ex:PersonD a ex:Person ; rdfs:label "D" ; ex:gender "Female" ; ex:order "Vanilla" .
+
+# Incomplete rows (Kari-style gaps)
+ex:PersonE a ex:Person ; rdfs:label "E" ; ex:gender "Male" .
+ex:PersonF a ex:Person ; rdfs:label "F" ; ex:order "Strawberry" .
+ex:PersonG a ex:Person ; rdfs:label "G" .

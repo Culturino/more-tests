@@ -11,18 +11,31 @@ import org.eclipse.rdf4j.query.parser.sparql.aggregate.AggregateNAryFunctionFact
 import java.util.function.BiFunction;
 
 public class ApproximatePercentileAggregateFactory implements AggregateNAryFunctionFactory {
+    private static final int ARITY = 2;
+
     @Override
     public String getIri() {
-        return StatisticsRDF4J.IRI + "approx_percentile";
+        // PercentileTest / SPARQL use stat:percentile (approx impl under the hood)
+        return StatisticsRDF4J.IRI + "percentile";
     }
 
     @Override
-    public AggregateNAryFunction buildFunction(int i, BiFunction<Integer, BindingSet, Value> biFunction) {
-        return new SimpleAggregateNAryFunction(biFunction, i);
+    public int getMinNumberOfArguments() {
+        return ARITY;
     }
 
     @Override
-    public AggregateCollector getCollector(int i) {
+    public int getMaxNumberOfArguments() {
+        return ARITY;
+    }
+
+    @Override
+    public AggregateNAryFunction buildFunction(BiFunction<Integer, BindingSet, Value> biFunction) {
+        return new SimpleAggregateNAryFunction(biFunction, ARITY);
+    }
+
+    @Override
+    public AggregateCollector getCollector() {
         return new ApproximatePercentileCollector();
     }
 }

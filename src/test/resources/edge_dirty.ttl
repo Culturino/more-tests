@@ -1,0 +1,32 @@
+@prefix ex: <http://example.org/edge#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Agenda #4 mini dataset: dirty / weird values.
+
+# clean numerics
+ex:n1 a ex:Item ; ex:case "clean" ; rdfs:label "n1" ; ex:val 10 ; ex:flag true .
+ex:n2 a ex:Item ; ex:case "clean" ; rdfs:label "n2" ; ex:val 20 ; ex:flag true .
+ex:n3 a ex:Item ; ex:case "clean" ; rdfs:label "n3" ; ex:val 30 ; ex:flag false .
+
+# string pretending to be a number
+ex:s1 a ex:Item ; ex:case "stringNum" ; rdfs:label "s1" ; ex:val "10" .
+ex:s2 a ex:Item ; ex:case "stringNum" ; rdfs:label "s2" ; ex:val 20 .
+
+# mixed clean + dirty in one case (poison numeric aggregates)
+ex:m1 a ex:Item ; ex:case "mixed" ; rdfs:label "m1" ; ex:val 1 ; ex:other 2 .
+ex:m2 a ex:Item ; ex:case "mixed" ; rdfs:label "m2" ; ex:val "oops" ; ex:other 4 .
+ex:m3 a ex:Item ; ex:case "mixed" ; rdfs:label "m3" ; ex:val 3 ; ex:other 6 .
+
+# all-true / all-false flags for probability
+ex:t1 a ex:Item ; ex:case "allTrue" ; ex:flag true .
+ex:t2 a ex:Item ; ex:case "allTrue" ; ex:flag true .
+ex:f1 a ex:Item ; ex:case "allFalse" ; ex:flag false .
+ex:f2 a ex:Item ; ex:case "allFalse" ; ex:flag false .
+
+# duplicate values on one subject (multi-valued property)
+ex:d1 a ex:Item ; ex:case "dup" ; rdfs:label "d1" ; ex:val 1, 1, 2 .
+
+# empty condition set for conditional probability (flag never true)
+ex:c1 a ex:Item ; ex:case "emptyCond" ; ex:val 10 ; ex:flag false .
+ex:c2 a ex:Item ; ex:case "emptyCond" ; ex:val 20 ; ex:flag false .

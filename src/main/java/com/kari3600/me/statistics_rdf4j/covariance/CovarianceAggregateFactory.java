@@ -9,20 +9,30 @@ import org.eclipse.rdf4j.query.parser.sparql.aggregate.*;
 import java.util.function.BiFunction;
 
 public class CovarianceAggregateFactory implements AggregateNAryFunctionFactory {
+	private static final int ARITY = 2;
 
 	@Override
 	public String getIri() {
-		return StatisticsRDF4J.IRI+"covariance";
+		return StatisticsRDF4J.IRI + "covariance";
 	}
 
 	@Override
-	public AggregateNAryFunction buildFunction(int argsCount,
-			BiFunction<Integer, BindingSet, Value> evaluationStepByIndex) {
-		return new SimpleAggregateNAryFunction(evaluationStepByIndex, argsCount);
+	public int getMinNumberOfArguments() {
+		return ARITY;
 	}
 
 	@Override
-	public AggregateCollector getCollector(int argsCount) {
-		return new CovarianceCollector(false, argsCount);
+	public int getMaxNumberOfArguments() {
+		return ARITY;
+	}
+
+	@Override
+	public AggregateNAryFunction buildFunction(BiFunction<Integer, BindingSet, Value> evaluationStepByIndex) {
+		return new SimpleAggregateNAryFunction(evaluationStepByIndex, ARITY);
+	}
+
+	@Override
+	public AggregateCollector getCollector() {
+		return new CovarianceCollector(false, ARITY);
 	}
 }

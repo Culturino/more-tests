@@ -11,18 +11,31 @@ import org.eclipse.rdf4j.query.parser.sparql.aggregate.AggregateNAryFunctionFact
 import java.util.function.BiFunction;
 
 public class ChiSquaredAggregateFactory implements AggregateNAryFunctionFactory {
+    // Existing tests use 2 args; M2 has no arity parameter on the factory SPI.
+    private static final int ARITY = 2;
+
     @Override
     public String getIri() {
         return StatisticsRDF4J.IRI + "chi_sq";
     }
 
     @Override
-    public AggregateNAryFunction buildFunction(int i, BiFunction<Integer, BindingSet, Value> biFunction) {
-        return new SimpleAggregateNAryFunction(biFunction, i);
+    public int getMinNumberOfArguments() {
+        return ARITY;
     }
 
     @Override
-    public AggregateCollector getCollector(int i) {
-        return new ChiSquaredCollector(i);
+    public int getMaxNumberOfArguments() {
+        return ARITY;
+    }
+
+    @Override
+    public AggregateNAryFunction buildFunction(BiFunction<Integer, BindingSet, Value> biFunction) {
+        return new SimpleAggregateNAryFunction(biFunction, ARITY);
+    }
+
+    @Override
+    public AggregateCollector getCollector() {
+        return new ChiSquaredCollector(ARITY);
     }
 }

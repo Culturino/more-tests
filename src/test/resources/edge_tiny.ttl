@@ -1,0 +1,27 @@
+@prefix ex: <http://example.org/edge#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Agenda #2 mini dataset: degenerate / tiny groups.
+# Slice with: ?s ex:case "..."
+
+# --- empty: no complete (x,y) pairs at all ---
+ex:empty1 a ex:Point ; ex:case "empty" ; rdfs:label "empty1" ; ex:x 1 .
+ex:empty2 a ex:Point ; ex:case "empty" ; rdfs:label "empty2" ; ex:y 2 .
+ex:empty3 a ex:Point ; ex:case "empty" ; rdfs:label "empty3" .
+
+# --- single: exactly one complete pair ---
+ex:single1 a ex:Point ; ex:case "single" ; rdfs:label "single1" ; ex:x 3 ; ex:y 4 .
+
+# --- identical: several identical pairs (no variance) ---
+ex:id1 a ex:Point ; ex:case "identical" ; rdfs:label "id1" ; ex:x 5 ; ex:y 5 .
+ex:id2 a ex:Point ; ex:case "identical" ; rdfs:label "id2" ; ex:x 5 ; ex:y 5 .
+ex:id3 a ex:Point ; ex:case "identical" ; rdfs:label "id3" ; ex:x 5 ; ex:y 5 .
+
+# --- constantX: x fixed, y varies (pearson denom has std(x)=0) ---
+ex:cx1 a ex:Point ; ex:case "constantX" ; rdfs:label "cx1" ; ex:x 2 ; ex:y 1 .
+ex:cx2 a ex:Point ; ex:case "constantX" ; rdfs:label "cx2" ; ex:x 2 ; ex:y 3 .
+ex:cx3 a ex:Point ; ex:case "constantX" ; rdfs:label "cx3" ; ex:x 2 ; ex:y 7 .
+
+# --- two: smallest non-degenerate line (corr = 1) ---
+ex:two1 a ex:Point ; ex:case "two" ; rdfs:label "two1" ; ex:x 1 ; ex:y 2 .
+ex:two2 a ex:Point ; ex:case "two" ; rdfs:label "two2" ; ex:x 2 ; ex:y 4 .

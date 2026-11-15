@@ -1,0 +1,21 @@
+@prefix ex: <http://example.org/edge#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Agenda #3 mini dataset: GROUP BY slices (healthy / sparse / identical).
+
+# group A — perfect line english=2*math (corr 1), 4 points
+ex:ga1 a ex:Student ; ex:group "A" ; rdfs:label "ga1" ; ex:math 1 ; ex:english 2 .
+ex:ga2 a ex:Student ; ex:group "A" ; rdfs:label "ga2" ; ex:math 2 ; ex:english 4 .
+ex:ga3 a ex:Student ; ex:group "A" ; rdfs:label "ga3" ; ex:math 3 ; ex:english 6 .
+ex:ga4 a ex:Student ; ex:group "A" ; rdfs:label "ga4" ; ex:math 4 ; ex:english 8 .
+
+# group B — single complete pair (degenerate pearson)
+ex:gb1 a ex:Student ; ex:group "B" ; rdfs:label "gb1" ; ex:math 9 ; ex:english 1 .
+
+# group C — identical pairs (no variance)
+ex:gc1 a ex:Student ; ex:group "C" ; rdfs:label "gc1" ; ex:math 5 ; ex:english 5 .
+ex:gc2 a ex:Student ; ex:group "C" ; rdfs:label "gc2" ; ex:math 5 ; ex:english 5 .
+
+# group D — incompletes only (REQUIRED join → empty group contribution)
+ex:gd1 a ex:Student ; ex:group "D" ; rdfs:label "gd1" ; ex:math 7 .
+ex:gd2 a ex:Student ; ex:group "D" ; rdfs:label "gd2" ; ex:english 3 .
