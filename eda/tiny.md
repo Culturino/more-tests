@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Name** | Tiny |
-| **Source file** | [`tiny.ttl`](../custom-data/tiny.ttl) |
-| **Table view** | [`custom-data/tiny.md`](../../../../custom-data/tiny.md) |
+| **Source file** | [`tiny.ttl`](../src/test/resources/custom-data/tiny.ttl) |
+| **Table view** | [`custom-data/tiny.md`](../custom-data/tiny.md) |
 | **Type** | Handmade edge fixture |
 | **Primary class** | `ex:Point` |
 | **Used by** | Pearson / covariance / percentile / probability edge tests |

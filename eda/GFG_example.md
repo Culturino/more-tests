@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | GFG example |
-| **Source file** | [`GFG_example.ttl`](../GFG_example.ttl) |
+| **Source file** | [`GFG_example.ttl`](../src/test/resources/GFG_example.ttl) |
 | **Type** | Tiny complete categorical demo |
 | **Primary class** | `ex:Person` |
 | **Used by** | Happy-path ChiSquaredTest |

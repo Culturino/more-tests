@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Cities |
-| **Source file** | [`cities.ttl`](../cities.ttl) |
+| **Source file** | [`cities.ttl`](../src/test/resources/cities.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:City` |
 | **Used by** | Happy-path pearson / covariance / probability; edge tests for missing elevation |

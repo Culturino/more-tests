@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Mountains |
-| **Source file** | [`mountains.ttl`](../mountains.ttl) |
+| **Source file** | [`mountains.ttl`](../src/test/resources/mountains.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Mountain` |
 | **Used by** | Happy-path pearson / covariance / percentile |

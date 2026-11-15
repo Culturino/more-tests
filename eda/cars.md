@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Cars |
-| **Source file** | [`cars.ttl`](../cars.ttl) |
+| **Source file** | [`cars.ttl`](../src/test/resources/cars.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Automobile` |
 | **Used by** | Happy-path pearson / covariance / percentile; edge tests for missing weight |

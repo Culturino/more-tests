@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Name** | Pairs |
-| **Source file** | [`pairs.ttl`](../custom-data/pairs.ttl) |
-| **Table view** | [`custom-data/pairs.md`](../../../../custom-data/pairs.md) |
+| **Source file** | [`pairs.ttl`](../src/test/resources/custom-data/pairs.ttl) |
+| **Table view** | [`custom-data/pairs.md`](../custom-data/pairs.md) |
 | **Type** | Handmade edge fixture |
 | **Primary class** | `ex:Student` |
 | **Used by** | Pearson / covariance / percentile / probability edge tests |

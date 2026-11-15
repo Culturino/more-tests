@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Name** | Groups |
-| **Source file** | [`groups.ttl`](../custom-data/groups.ttl) |
-| **Table view** | [`custom-data/groups.md`](../../../../custom-data/groups.md) |
+| **Source file** | [`groups.ttl`](../src/test/resources/custom-data/groups.ttl) |
+| **Table view** | [`custom-data/groups.md`](../custom-data/groups.md) |
 | **Type** | Handmade edge fixture |
 | **Primary class** | `ex:Student` |
 | **Used by** | PearsonEdgeTest richer queries |
