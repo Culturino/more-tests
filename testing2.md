@@ -131,7 +131,7 @@ Covered mainly in `PearsonEdgeTest` (`richerGroupBy_pearson`, `richerFilterEmpti
 |-----------|--------|
 | String `"10"` mixed into percentile | **Unbound** |
 | `"oops"` mixed into pearson | **Unbound** |
-| `stat:p(?flag)` with raw RDF boolean | **Unbound** (use `?flag = true`) |
+| `stat:p(?flag)` with raw RDF boolean | **Works** (Kari `8d15da0`; all-true → **1.0**) |
 | `stat:p(?flag = true)` all true / all false | **1.0** / **0.0** |
 | Conditional prob with condition never true | **NaN** |
 | Multi-valued `1,1,2` percentile | **≈2.0** |
@@ -168,7 +168,7 @@ TestUtil.java
 1. **Missing values via `OPTIONAL`:** most stats → **unbound**; one bad row can poison the group; **chi_sq** still returns a number.
 2. **Tiny data:** pearson → **NaN**; covariance often → **0**; empty percentile can **NPE**.
 3. **Richer SPARQL works:** `GROUP BY`, empty `FILTER`, multi-aggregate selects are covered.
-4. **Dirty types:** unbound or throw; boolean flags need `= true`; percentile arg must be in `[0,1]`.
+4. **Dirty types:** unbound or throw for bad numerics; raw `xsd:boolean` in `p()` works; percentile arg must be in `[0,1]`.
 
 Happy-path clones on DBpedia-style data remain; these edge tests add the interesting coverage.
 

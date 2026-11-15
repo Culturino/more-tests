@@ -100,19 +100,19 @@ All flags false → `?flag = true` never holds.
 
 > **Result:** `0.0`
 
-**Lesson:** write `?flag = true`, not bare `?flag`.
+**Note:** `?flag = true` is still fine; bare `?flag` also works after Kari’s `xsd:boolean` fix.
 
 ### Edge cases
 
 #### `dirtyRawBooleanFlag_probability`
 
 ```sparql
-stat:p(?flag)    # raw flag — wrong shape
+stat:p(?flag)    # raw Turtle xsd:boolean
 ```
 
-Raw `xsd:boolean` property → type error.
+Raw `xsd:boolean` property is accepted (`CollectorUtil.asBoolean` / Kari `8d15da0`).
 
-> **Result:** unbound
+> **Result:** `1.0` (allTrue case)
 
 #### `dirtyEmptyCondition_probability`
 
@@ -134,7 +134,7 @@ Conditional probability with an empty “given” set (like dividing by zero).
 | OPTIONAL | unbound |
 | Empty absolute p | NaN |
 | Clean / allTrue / allFalse | `2/3`, `1.0`, `0.0` |
-| Raw boolean | unbound |
+| Raw boolean | `1.0` (fixed) |
 | Empty condition | NaN |
 
 ## Vs the other aggregates
@@ -144,4 +144,4 @@ Conditional probability with an empty “given” set (like dividing by zero).
 | OPTIONAL blank | unbound | unbound | unbound | unbound |
 | Empty input | NaN | 0.0 | NPE | **NaN** |
 | Empty *condition* | — | — | — | **NaN** |
-| Raw xsd:boolean | — | — | — | unbound; use `= true` |
+| Raw xsd:boolean | — | — | — | **works** (Kari `8d15da0`) |

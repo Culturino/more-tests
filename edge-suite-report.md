@@ -12,7 +12,7 @@
 
 - OPTIONAL / type-error → unbound matches normal SPARQL behavior.
 - Degenerate pearson → NaN is fine stats behavior.
-- **Clear bugs (2):** empty percentile **NPE**; `stat:p` rejecting raw **xsd:boolean**.
+- **Clear bugs (1):** empty percentile **NPE**. (Raw `xsd:boolean` in `stat:p` fixed upstream `8d15da0`.)
 - Several other cases are **debatable design**, not crashes.
 
 ---
@@ -44,7 +44,7 @@
 | Degenerate / empty covariance | 0.0 (incl. empty & n=1) | OK for identical; empty/n=1 weak |
 | Empty percentile | NullPointerException | **Bug** |
 | Empty probability | NaN (0/0) | Debatable |
-| `stat:p(raw xsd:boolean)` | Unbound (`?flag = true` works) | **Bug** |
+| `stat:p(raw xsd:boolean)` | **1.0** on all-true (Kari `8d15da0` fix) | Fixed upstream |
 | Percentile rank 1.5 | Throws (hard crash) | Debatable (prefer unbound) |
 
 ---
@@ -61,7 +61,7 @@ Pearson → NaN when variance/n is insufficient. Covariance → 0 on degenerate 
 GROUP BY, empty FILTER, and multi-aggregate SELECT behave as coded: healthy group A → 1.0; B/C → NaN; D absent under REQUIRED. Covered mainly in `PearsonEdgeTest`.
 
 ### #4 Dirty / weird values
-Strings in numeric paths → unbound. Boolean flags need an equality expression today (`?flag = true`). Rank outside `[0,1]` throws instead of a held type error → unbound.
+Strings in numeric paths → unbound. Raw `xsd:boolean` in `stat:p(?flag)` works (Kari fix). Rank outside `[0,1]` throws instead of a held type error → unbound.
 
 ---
 
@@ -70,7 +70,7 @@ Strings in numeric paths → unbound. Boolean flags need an equality expression 
 | Priority | Item | Why |
 |----------|------|-----|
 | **P0** | Empty percentile NPE | Should be unbound / clean type error, not crash |
-| **P0** | Accept `xsd:boolean` in `asBoolean` / `p()` | Turtle booleans are valid RDF; current check is too narrow |
+| ~~**P0**~~ | ~~Accept `xsd:boolean` in `asBoolean` / `p()`~~ | **Done** in Kari `8d15da0` — pulled into this fork |
 | **P1** | Empty / n=1 covariance → NaN or unbound | `0.0` looks like a real answer for undefined cov |
 | **P1** | Empty `p` / bad percentile rank → unbound | Align with SPARQL error → unbound policy |
 | **P2** | Document or align `chi_sq` null policy | Keep null-as-category only if intentional |

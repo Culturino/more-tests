@@ -117,12 +117,13 @@ public class ProbabilityEdgeTest {
 
     @Test
     public void dirtyRawBooleanFlag_probability() {
-        assertUnboundAggregate("custom-data/dirty.ttl", PREFIX + """
+        // Kari 8d15da0: asBoolean accepts Turtle xsd:boolean, not only SPARQL BooleanLiteral
+        assertEquals(1.0, query1Group1Var("custom-data/dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag) AS ?prob)
                 WHERE {
                     ?s ex:case "allTrue" ; ex:flag ?flag .
                 }
-                """, "prob");
+                """, "prob").doubleValue(), 1e-9);
     }
 
     @Test

@@ -291,7 +291,7 @@ Dataset: [`dirty`](custom-data/dirty.md).
 | Input | Observed |
 |-------|----------|
 | String `"10"` / `"oops"` in numeric stats | **Unbound** |
-| `stat:p(?flag)` raw xsd:boolean | **Unbound** (use `?flag = true`) |
+| `stat:p(?flag)` raw xsd:boolean | **Works** (Kari `8d15da0`; e.g. all-true → **1.0**) |
 | All true / all false with `?flag = true` | **1.0** / **0.0** |
 | Conditional `p` with empty condition set | **NaN** |
 | Percentile rank `1.5` | **Throws** |
