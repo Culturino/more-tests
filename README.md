@@ -12,7 +12,7 @@
 
 Further docs:
 
-- **[EDA_REPORT.md](EDA_REPORT.md)** — exploratory analysis of every fixture (completeness, ranges, missingness, charts)
+- **[src/test/resources/eda/](src/test/resources/eda/)** — per-dataset EDA (counts, completeness, value kinds)
 - **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)** — edge-case agendas #1–#4 findings
 - **[post analysis/](post%20analysis/)** — plain-language line-by-line walkthrough of the new edge tests
 
@@ -132,7 +132,6 @@ Factories are registered via Java SPI under:
 ```text
 more-tests/
 ├── README.md
-├── EDA_REPORT.md             ← exploratory analysis of all fixtures
 ├── EDGE_CASE_REPORT.md
 ├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
 ├── pom.xml
@@ -370,7 +369,7 @@ This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMi
 
 | Doc | Contents |
 |-----|----------|
-| [EDA_REPORT.md](EDA_REPORT.md) | Exploratory analysis of all datasets |
+| [src/test/resources/eda/](src/test/resources/eda/) | Per-dataset EDA write-ups |
 | [EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md) | Full write-up of agendas #1–#4 |
 | [custom-data/](custom-data/) | Table views of handmade edge fixtures |
 | [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |

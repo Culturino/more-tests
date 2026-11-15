@@ -21,7 +21,7 @@ These docs are for humans. They do not run tests. The real code lives under `src
 
 - [README.md](../README.md) — project overview
 - [EDGE_CASE_REPORT.md](../EDGE_CASE_REPORT.md) — edge-case findings
-- [EDA_REPORT.md](../EDA_REPORT.md) — dataset exploration + charts
+- [src/test/resources/eda/](../src/test/resources/eda/) — per-dataset EDA
 - Table views of handmade data: [custom-data/](../custom-data/)
 
 ## Code under discussion

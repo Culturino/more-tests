@@ -18,9 +18,9 @@ more-tests/
 ├── pom.xml                 ← shopping list for the build tool (Maven)
 ├── README.md               ← human guide
 ├── EDGE_CASE_REPORT.md     ← “weird situations” write-up
-├── EDA_REPORT.md           ← “what’s in our datasets” write-up
 ├── custom-data/            ← tables so humans can read small fake datasets
 ├── post analysis/          ← this walkthrough (you are here)
+├── src/test/resources/eda/ ← per-dataset EDA write-ups
 └── src/
     ├── main/               ← the calculator (Java)
     └── test/               ← exams + answer sheets
@@ -35,7 +35,7 @@ Ignore `target/` — leftovers from running tests.
 | `pom.xml` | Maven config: Java 25, RDF4J, JUnit, math libs. Recipe so `mvn test` works. |
 | `README.md` | Tour guide. Doesn’t run anything. |
 | `EDGE_CASE_REPORT.md` | Diary of weird cases (missing scores, tiny groups, garbage types). |
-| `EDA_REPORT.md` | Look-at-the-data notes + charts. |
+| `src/test/resources/eda/` | Per-dataset EDA (counts, completeness, value kinds). |
 
 ## `custom-data/` (human tables)
 
