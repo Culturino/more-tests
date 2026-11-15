@@ -8,7 +8,7 @@ ex:PersonB a ex:Person ; rdfs:label "B" ; ex:gender "Male" ; ex:order "Vanilla" 
 ex:PersonC a ex:Person ; rdfs:label "C" ; ex:gender "Female" ; ex:order "Chocolate" .
 ex:PersonD a ex:Person ; rdfs:label "D" ; ex:gender "Female" ; ex:order "Vanilla" .
 
-# Incomplete rows (Kari-style gaps)
+# Incomplete rows (incomplete gaps)
 ex:PersonE a ex:Person ; rdfs:label "E" ; ex:gender "Male" .
 ex:PersonF a ex:Person ; rdfs:label "F" ; ex:order "Strawberry" .
 ex:PersonG a ex:Person ; rdfs:label "G" .

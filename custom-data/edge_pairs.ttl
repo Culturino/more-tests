@@ -3,7 +3,7 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 # Agenda #1 fixture: incomplete math/english score pairs.
-# Kari-style: alice+bob have math [0,1] and no english.
+# Example: alice+bob have math [0,1] and no english.
 
 ex:alice a ex:Student ; rdfs:label "alice" ; ex:math 0 .
 ex:bob   a ex:Student ; rdfs:label "bob"   ; ex:math 1 .

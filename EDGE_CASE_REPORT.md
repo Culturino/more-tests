@@ -2,15 +2,17 @@
 
 This project adds statistics functions to SPARQL (query language for graph data): correlation, covariance, percentile, probability, chi-squared, and related helpers.
 
-Kari’s feedback was that earlier tests mostly copied the same happy-path pattern. We added **edge-case** coverage in four agenda points, with small handmade datasets plus a few tests on real fixtures (`cars.ttl`, `cities.ttl`).
+Earlier tests mostly copied the same happy-path pattern. We added **edge-case** coverage in four agenda points, with small handmade datasets in [`custom-data/`](custom-data/) plus a few tests on real fixtures ([`cars.ttl`](src/test/resources/cars.ttl), [`cities.ttl`](src/test/resources/cities.ttl)).
 
 All of this lives mainly in:
 
-- Datasets: `src/test/resources/edge_*.ttl`
-- Tests: `src/test/java/.../EdgeCaseTest.java`
-- Helpers: `TestUtil.java` (`queryAll`, unbound checks)
+- Datasets: [`custom-data/`](custom-data/) (`edge_*.ttl`)
+- Tests: [`EdgeCaseTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/EdgeCaseTest.java)
+- Helpers: [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, unbound checks)
 
 Full suite: **green** locally (`mvn test`).
+
+See also the project overview in [`README.md`](README.md).
 
 ---
 
@@ -24,38 +26,41 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 
 ---
 
+## Custom datasets
+
+| File | Agenda | Role |
+|------|--------|------|
+| [`edge_pairs.ttl`](custom-data/edge_pairs.ttl) | #1 | Students with `math` / `english`; some missing one or both |
+| [`edge_chi.ttl`](custom-data/edge_chi.ttl) | #1 | Tiny gender×order table with incomplete people |
+| [`edge_tiny.ttl`](custom-data/edge_tiny.ttl) | #2 | Degenerate sizes via `ex:case` |
+| [`edge_groups.ttl`](custom-data/edge_groups.ttl) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
+| [`edge_dirty.ttl`](custom-data/edge_dirty.ttl) | #4 | Dirty / weird typed values |
+
+---
+
 ## Agenda #1 — Incomplete / null pairs
 
 ### Goal
 
-Answer Kari’s example: what if we correlate something like `[0, 1]` with `[null, null]` — one side has numbers, the other is missing?
-
-### Mini datasets
-
-| File | Role |
-|------|------|
-| `edge_pairs.ttl` | Students with `math` / `english`; some missing one or both |
-| `edge_chi.ttl` | Tiny gender×order table with some incomplete people |
-
-Also reused **`cars.ttl`** and **`cities.ttl`** (already incomplete in the wild) via `EDGE_*` tests.
+What if we correlate something like `[0, 1]` with missing partners — one side has numbers, the other is blank?
 
 ### What the code does (simple)
 
-- **OPTIONAL tests:** load students/cars/cities, allow missing values in, call `stat:pearson` / `covariance` / `percentile` / `p` / etc.
-- **Assert:** usually one result row with the answer variable **unbound** (empty) — not a crash, not a useful number.
-- **REQUIRED tests:** both properties required → incompletes disappear; we check known numbers (e.g. perfect line → pearson `1.0`).
-- **`EDGE_*`:** same idea on real datasets so Kari can see names like `EDGE_carsOptionalMissingWeight_pearson`.
+- **OPTIONAL tests:** allow missing values in, call `stat:pearson` / `covariance` / `percentile` / `p` / etc.
+- **Assert:** usually one result row with the answer variable **unbound** (empty).
+- **REQUIRED tests:** both properties required → incompletes disappear; known numbers (e.g. perfect line → pearson `1.0`).
+- **`EDGE_*`:** same idea on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
 
 ### What we learned
 
 | Situation | Typical result |
 |-----------|----------------|
 | OPTIONAL missing into pearson / cov / percentile / median / probability | **Unbound** (empty answer) |
-| One missing row in a mixed group | **Poisons the whole aggregate** (completes don’t save it) |
+| One missing row in a mixed group | **Poisons the whole aggregate** |
 | REQUIRED both sides | Incompletes dropped; math works on the rest |
-| `chi_sq` + OPTIONAL missing | **Still returns a number** (treats blanks like a category) — different from the others |
+| `chi_sq` + OPTIONAL missing | **Still returns a number** (treats blanks like a category) |
 
-Kari’s `[0,1]` vs `[null,null]` (alice+bob, OPTIONAL english): **empty correlation**, not a crash.
+Incomplete pair case (alice+bob, OPTIONAL english): **empty correlation**, not a crash.
 
 ---
 
@@ -63,23 +68,17 @@ Kari’s `[0,1]` vs `[null,null]` (alice+bob, OPTIONAL english): **empty correla
 
 ### Goal
 
-Not “some values missing,” but “almost no data” — too few points or no spread for correlation to make sense.
+Almost no data — too few points or no spread for correlation.
 
-### Mini dataset: `edge_tiny.ttl`
-
-Slices via `ex:case`:
+### Dataset: [`edge_tiny.ttl`](custom-data/edge_tiny.ttl)
 
 | Case | Meaning |
 |------|---------|
 | `empty` | No complete `(x,y)` pairs |
 | `single` | Exactly one pair |
-| `identical` | Several copies of the same pair (no variation) |
-| `constantX` | `x` fixed, `y` changes (std of x = 0) |
+| `identical` | Several copies of the same pair |
+| `constantX` | `x` fixed, `y` changes |
 | `two` | Smallest healthy line (`y = 2x`) → corr ≈ 1 |
-
-### What the code does (simple)
-
-For each slice, run pearson / covariance / percentile / probability and lock whatever the library actually returns.
 
 ### What we learned
 
@@ -87,21 +86,15 @@ For each slice, run pearson / covariance / percentile / probability and lock wha
 |-----------------|--------|
 | pearson on empty / single / identical / constantX | **NaN** |
 | covariance on those | **0.0** |
-| percentile with zero inputs | **NullPointerException** (bug-ish in approx collector) |
+| percentile with zero inputs | **NullPointerException** |
 | probability with zero rows | **NaN** (0/0) |
 | `two` (two good points) | pearson **1**, covariance **1** |
-
-So: tiny data doesn’t always “fail loudly”; sometimes you get **NaN**, sometimes **0**, sometimes a **crash**.
 
 ---
 
 ## Agenda #3 — Richer queries
 
-### Goal
-
-Stop only testing “one `SELECT`, one aggregate, one number.” Use queries closer to real use.
-
-### Mini dataset: `edge_groups.ttl`
+### Dataset: [`edge_groups.ttl`](custom-data/edge_groups.ttl)
 
 | Group | Content |
 |-------|---------|
@@ -110,64 +103,40 @@ Stop only testing “one `SELECT`, one aggregate, one number.” Use queries clo
 | **C** | Identical pairs → no variance |
 | **D** | Incomplete only → never appears under REQUIRED join |
 
-### What the code does (simple)
-
-1. **`GROUP BY ?g`** — pearson + `COUNT(*)` per group.  
-   Expect: A → `1.0` / n=4; B & C → `NaN`; D absent.
-2. **`FILTER` that kills all rows** (`math > 1000` on group A) → pearson **NaN**.
-3. **Multi-aggregate `SELECT`** — pearson + covariance + count in one query on group A → `1.0`, `≈3.333`, `n=4`.
-
 ### What we learned
 
-- Grouping works; sparse groups show the same degenerate behavior as agenda #2.
-- Empty filter → NaN (bound), not unbound.
-- Several aggregates in one query work together on a healthy group.
+- **`GROUP BY`:** A → `1.0` / n=4; B & C → `NaN`; D absent.
+- Empty **`FILTER`** → NaN (bound), not unbound.
+- Multi-aggregate **`SELECT`** (pearson + covariance + count) works on a healthy group.
 
 ---
 
 ## Agenda #4 — Dirty / weird values
 
-### Goal
-
-Junk input: strings as numbers, mixed types, boolean quirks, duplicate values, bad percentile argument.
-
-### Mini dataset: `edge_dirty.ttl`
-
-Cases: `clean`, `stringNum`, `mixed`, `allTrue`, `allFalse`, `dup`, `emptyCond`.
-
-### What the code does (simple)
-
-Run percentile / pearson / probability on each dirty slice and assert:
+### Dataset: [`edge_dirty.ttl`](custom-data/edge_dirty.ttl)
 
 | Test idea | Result |
 |-----------|--------|
 | String `"10"` mixed into percentile | **Unbound** |
 | `"oops"` mixed into pearson | **Unbound** |
-| `stat:p(?flag)` with raw RDF boolean | **Unbound** (library wants a SPARQL boolean expression) |
+| `stat:p(?flag)` with raw RDF boolean | **Unbound** (use `?flag = true`) |
 | `stat:p(?flag = true)` all true / all false | **1.0** / **0.0** |
 | Conditional prob with condition never true | **NaN** |
 | Multi-valued `1,1,2` percentile | **≈2.0** |
 | Percentile rank `1.5` (outside 0..1) | **Throws** |
 | Clean baseline `p(val > 15)` | **2/3** |
 
-### What we learned
-
-- Bad types don’t crash the query; they usually wipe the answer (unbound).
-- Prefer boolean **expressions** (`?flag = true`) for `stat:p`, not raw flags.
-- Out-of-range percentile is a hard error from the sketch library.
-
 ---
 
-## Code map (where to look)
+## Code map
 
 ```
-src/test/resources/
+custom-data/
   edge_pairs.ttl    #1 nulls (students)
   edge_chi.ttl      #1 chi_sq gaps
   edge_tiny.ttl     #2 tiny / empty
   edge_groups.ttl   #3 GROUP BY
   edge_dirty.ttl    #4 dirty values
-  cars.ttl, cities.ttl   # reused by EDGE_* tests
 
 src/test/java/.../EdgeCaseTest.java
   optional* / required*     → #1 handmade
@@ -181,26 +150,22 @@ src/test/java/.../TestUtil.java
   queryAll         → multi-row / unbound checks
 ```
 
-### Helper pattern (simple)
-
-`assertUnboundAggregate` means: “run this query, expect exactly one row, and the named variable has **no value**.”
-
-That’s how we document “empty answer” without pretending we got a correlation.
+`assertUnboundAggregate` means: run this query, expect exactly one row, and the named variable has **no value**.
 
 ---
 
-## Big takeaways for Kari
+## Big takeaways
 
 1. **Missing values via `OPTIONAL`:** most stats → **unbound**; one bad row can poison the group; **chi_sq** still returns a number.
 2. **Tiny data:** pearson → **NaN**; covariance often → **0**; empty percentile can **NPE**.
 3. **Richer SPARQL works:** `GROUP BY`, empty `FILTER`, multi-aggregate selects are covered.
 4. **Dirty types:** unbound or throw; boolean flags need `= true`; percentile arg must be in `[0,1]`.
 
-Happy-path clones on DBpedia data remain; these edge tests are the “interesting” coverage he asked for.
+Happy-path clones on DBpedia-style data remain; these edge tests add the interesting coverage.
 
 ---
 
-## Not in this report (next)
+## Out of scope (next)
 
-- **EDA writeup per existing DBpedia dataset** (separate Kari request).
+- EDA writeup per existing DBpedia-style dataset.
 - Changing library behavior (tests document current behavior; they don’t fix NaN/NPE/unbound policies).

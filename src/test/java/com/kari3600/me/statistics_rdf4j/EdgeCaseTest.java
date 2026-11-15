@@ -16,10 +16,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Agenda #1: incomplete / null pairs — edge_pairs.ttl, edge_chi.ttl (+ EDGE_* cars/cities).
- * Agenda #2: tiny / empty groups — edge_tiny.ttl.
- * Agenda #3: richer queries — edge_groups.ttl (GROUP BY / FILTER / multi-agg).
- * Agenda #4: dirty / weird values — edge_dirty.ttl.
+ * Agenda #1: incomplete / null pairs — custom-data/edge_pairs.ttl, custom-data/edge_chi.ttl (+ EDGE_* cars/cities).
+ * Agenda #2: tiny / empty groups — custom-data/edge_tiny.ttl.
+ * Agenda #3: richer queries — custom-data/edge_groups.ttl (GROUP BY / FILTER / multi-agg).
+ * Agenda #4: dirty / weird values — custom-data/edge_dirty.ttl.
  *
  * Observed semantics (RDF4J 6.2.0-M2 + this library):
  * For pearson/covariance/percentile/median/probability: unbound OPTIONAL args
@@ -49,11 +49,11 @@ public class EdgeCaseTest {
     }
 
     private static void assertUnboundAggregate(String query, String variable) {
-        assertUnboundAggregate("edge_pairs.ttl", query, variable);
+        assertUnboundAggregate("custom-data/edge_pairs.ttl", query, variable);
     }
 
     /**
-     * Kari's [0,1] vs [null,null]: alice+bob have math, no english,
+     * Incomplete pair case [0,1] vs missing english: alice+bob have math, no english,
      * forced into the aggregate via OPTIONAL → unbound ?corr.
      */
     @Test
@@ -114,7 +114,7 @@ public class EdgeCaseTest {
      */
     @Test
     public void requiredPerfectLine_pearson() {
-        assertEquals(1.0, query1Group1Var("edge_pairs.ttl", PREFIX + """
+        assertEquals(1.0, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     VALUES ?student { ex:cara ex:dan ex:ella ex:finn }
@@ -127,7 +127,7 @@ public class EdgeCaseTest {
     @Test
     public void requiredPerfectLine_covariance() {
         // sample cov of [2,3,4,10] and [4,6,8,20]
-        assertEquals(25.833333333333332, query1Group1Var("edge_pairs.ttl", PREFIX + """
+        assertEquals(25.833333333333332, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:covariance(?math, ?english) AS ?cov)
                 WHERE {
                     VALUES ?student { ex:cara ex:dan ex:ella ex:finn }
@@ -143,7 +143,7 @@ public class EdgeCaseTest {
      */
     @Test
     public void requiredAllComplete_pearson() {
-        assertEquals(0.45191786568701003, query1Group1Var("edge_pairs.ttl", PREFIX + """
+        assertEquals(0.45191786568701003, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     ?student a ex:Student ;
@@ -155,7 +155,7 @@ public class EdgeCaseTest {
 
     @Test
     public void requiredAllComplete_covariance() {
-        assertEquals(9.933333333333334, query1Group1Var("edge_pairs.ttl", PREFIX + """
+        assertEquals(9.933333333333334, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:covariance(?math, ?english) AS ?cov)
                 WHERE {
                     ?student a ex:Student ;
@@ -170,8 +170,8 @@ public class EdgeCaseTest {
      * Document actual outcome (unbound or non-finite).
      */
     @Test
-    public void requiredKariOnly_emptyAggregate() {
-        List<BindingSet> rows = queryAll("edge_pairs.ttl", PREFIX + """
+    public void requiredIncompleteOnly_emptyAggregate() {
+        List<BindingSet> rows = queryAll("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     VALUES ?student { ex:alice ex:bob }
@@ -330,7 +330,7 @@ public class EdgeCaseTest {
     /** Handmade edge_pairs: univariate / boolean with OPTIONAL english. */
     @Test
     public void EDGE_edgePairsOptionalEnglish_percentile() {
-        assertUnboundAggregate("edge_pairs.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:percentile(?english, 0.5) AS ?p)
                 WHERE {
                     ?student a ex:Student .
@@ -341,7 +341,7 @@ public class EdgeCaseTest {
 
     @Test
     public void EDGE_edgePairsOptionalEnglish_probability() {
-        assertUnboundAggregate("edge_pairs.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:p(?english > 5) AS ?prob)
                 WHERE {
                     ?student a ex:Student .
@@ -352,7 +352,7 @@ public class EdgeCaseTest {
 
     @Test
     public void EDGE_edgePairsOptionalEnglish_approxMedian() {
-        assertUnboundAggregate("edge_pairs.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
                 SELECT (stat:approx_median(?english) AS ?med)
                 WHERE {
                     ?student a ex:Student .
@@ -367,7 +367,7 @@ public class EdgeCaseTest {
      */
     @Test
     public void EDGE_chiOptionalMissing_chiSq() {
-        assertEquals(5.25, query1Group1Var("edge_chi.ttl", CHI_PREFIX + """
+        assertEquals(5.25, query1Group1Var("custom-data/edge_chi.ttl", CHI_PREFIX + """
                 SELECT (stat:chi_sq(?gender, ?order) AS ?chi)
                 WHERE {
                     ?person a ex:Person .
@@ -380,7 +380,7 @@ public class EdgeCaseTest {
     /** Incomplete-only slice still yields a finite chi_sq (nulls as categories). */
     @Test
     public void EDGE_chiOnlyIncompletes_chiSq() {
-        assertEquals(0.75, query1Group1Var("edge_chi.ttl", CHI_PREFIX + """
+        assertEquals(0.75, query1Group1Var("custom-data/edge_chi.ttl", CHI_PREFIX + """
                 SELECT (stat:chi_sq(?gender, ?order) AS ?chi)
                 WHERE {
                     VALUES ?person { ex:PersonE ex:PersonF ex:PersonG }
@@ -394,7 +394,7 @@ public class EdgeCaseTest {
     /** REQUIRED complete 2x2 balanced table → chi_sq 0 (independent). */
     @Test
     public void EDGE_chiRequiredComplete_chiSq() {
-        assertEquals(0.0, query1Group1Var("edge_chi.ttl", CHI_PREFIX + """
+        assertEquals(0.0, query1Group1Var("custom-data/edge_chi.ttl", CHI_PREFIX + """
                 SELECT (stat:chi_sq(?gender, ?order) AS ?chi)
                 WHERE {
                     ?person a ex:Person ;
@@ -404,10 +404,10 @@ public class EdgeCaseTest {
                 """, "chi").doubleValue(), 1e-9);
     }
 
-    // --- Agenda #2: edge_tiny.ttl (empty / single / identical / constantX / two) ---
+    // --- Agenda #2: custom-data/edge_tiny.ttl (empty / single / identical / constantX / two) ---
 
     private static void assertTinyPearsonNaN(String caseName) {
-        double d = query1Group1Var("edge_tiny.ttl", PREFIX + """
+        double d = query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:pearson(?x, ?y) AS ?corr)
                 WHERE {
                     ?s ex:case "%s" ;
@@ -419,7 +419,7 @@ public class EdgeCaseTest {
     }
 
     private static void assertTinyCovarianceZero(String caseName) {
-        assertEquals(0.0, query1Group1Var("edge_tiny.ttl", PREFIX + """
+        assertEquals(0.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:covariance(?x, ?y) AS ?cov)
                 WHERE {
                     ?s ex:case "%s" ;
@@ -443,7 +443,7 @@ public class EdgeCaseTest {
     public void tinyEmpty_percentileNpe() {
         // no ?x bindings in this slice → approx percentile NPE on empty digest
         assertThrows(NullPointerException.class, () ->
-                query1Group1Var("edge_tiny.ttl", PREFIX + """
+                query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                         SELECT (stat:percentile(?x, 0.5) AS ?p)
                         WHERE {
                             VALUES ?s { ex:empty2 ex:empty3 }
@@ -464,7 +464,7 @@ public class EdgeCaseTest {
 
     @Test
     public void tinySingle_percentileIsTheValue() {
-        assertEquals(3.0, query1Group1Var("edge_tiny.ttl", PREFIX + """
+        assertEquals(3.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:percentile(?x, 0.5) AS ?p)
                 WHERE {
                     ?s ex:case "single" ; ex:x ?x .
@@ -484,7 +484,7 @@ public class EdgeCaseTest {
 
     @Test
     public void tinyIdentical_percentile() {
-        assertEquals(5.0, query1Group1Var("edge_tiny.ttl", PREFIX + """
+        assertEquals(5.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:percentile(?x, 0.5) AS ?p)
                 WHERE {
                     ?s ex:case "identical" ; ex:x ?x .
@@ -505,7 +505,7 @@ public class EdgeCaseTest {
     /** Smallest non-degenerate line: two points on y=2x → corr ~ 1, cov = 1. */
     @Test
     public void tinyTwo_pearsonOne() {
-        assertEquals(1.0, query1Group1Var("edge_tiny.ttl", PREFIX + """
+        assertEquals(1.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:pearson(?x, ?y) AS ?corr)
                 WHERE {
                     ?s ex:case "two" ; ex:x ?x ; ex:y ?y .
@@ -515,7 +515,7 @@ public class EdgeCaseTest {
 
     @Test
     public void tinyTwo_covarianceOne() {
-        assertEquals(1.0, query1Group1Var("edge_tiny.ttl", PREFIX + """
+        assertEquals(1.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:covariance(?x, ?y) AS ?cov)
                 WHERE {
                     ?s ex:case "two" ; ex:x ?x ; ex:y ?y .
@@ -526,7 +526,7 @@ public class EdgeCaseTest {
     @Test
     public void tinyEmpty_probabilityNaN() {
         // zero rows into p(...) → matches/total = 0/0 → NaN
-        double d = query1Group1Var("edge_tiny.ttl", PREFIX + """
+        double d = query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
                 SELECT (stat:p(?x > 0) AS ?prob)
                 WHERE {
                     VALUES ?s { ex:empty2 ex:empty3 }
@@ -536,11 +536,11 @@ public class EdgeCaseTest {
         assertTrue(Double.isNaN(d), "expected NaN for empty probability, got " + d);
     }
 
-    // --- Agenda #3: richer queries (edge_groups.ttl) ---
+    // --- Agenda #3: richer queries (custom-data/edge_groups.ttl) ---
 
     @Test
     public void richerGroupBy_pearsonPerGroup() {
-        List<BindingSet> rows = queryAll("edge_groups.ttl", PREFIX + """
+        List<BindingSet> rows = queryAll("custom-data/edge_groups.ttl", PREFIX + """
                 SELECT ?g (stat:pearson(?math, ?english) AS ?corr) (COUNT(*) AS ?n)
                 WHERE {
                     ?s ex:group ?g ;
@@ -571,7 +571,7 @@ public class EdgeCaseTest {
 
     @Test
     public void richerFilterEmpties_pearsonNaN() {
-        double d = query1Group1Var("edge_groups.ttl", PREFIX + """
+        double d = query1Group1Var("custom-data/edge_groups.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     ?s ex:group "A" ;
@@ -585,7 +585,7 @@ public class EdgeCaseTest {
 
     @Test
     public void richerMultiAggregate_pearsonCovCount() {
-        List<BindingSet> rows = queryAll("edge_groups.ttl", PREFIX + """
+        List<BindingSet> rows = queryAll("custom-data/edge_groups.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                        (stat:covariance(?math, ?english) AS ?cov)
                        (COUNT(*) AS ?n)
@@ -602,12 +602,12 @@ public class EdgeCaseTest {
         assertEquals(4, ((Literal) r.getValue("n")).intValue());
     }
 
-    // --- Agenda #4: dirty / weird values (edge_dirty.ttl) ---
+    // --- Agenda #4: dirty / weird values (custom-data/edge_dirty.ttl) ---
 
     @Test
     public void dirtyStringNumber_percentileUnbound() {
         // plain string "10" is not an XSD numeric → type error → unbound
-        assertUnboundAggregate("edge_dirty.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:percentile(?val, 0.5) AS ?p)
                 WHERE {
                     ?s ex:case "stringNum" ; ex:val ?val .
@@ -617,7 +617,7 @@ public class EdgeCaseTest {
 
     @Test
     public void dirtyMixedNonNumeric_pearsonUnbound() {
-        assertUnboundAggregate("edge_dirty.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:pearson(?val, ?other) AS ?corr)
                 WHERE {
                     ?s ex:case "mixed" ; ex:val ?val ; ex:other ?other .
@@ -628,7 +628,7 @@ public class EdgeCaseTest {
     @Test
     public void dirtyRawBooleanFlag_probabilityUnbound() {
         // CollectorUtil.asBoolean requires BooleanLiteral, not plain xsd:boolean
-        assertUnboundAggregate("edge_dirty.ttl", PREFIX + """
+        assertUnboundAggregate("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag) AS ?prob)
                 WHERE {
                     ?s ex:case "allTrue" ; ex:flag ?flag .
@@ -638,7 +638,7 @@ public class EdgeCaseTest {
 
     @Test
     public void dirtyAllTrue_probabilityOne() {
-        assertEquals(1.0, query1Group1Var("edge_dirty.ttl", PREFIX + """
+        assertEquals(1.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "allTrue" ; ex:flag ?flag .
@@ -648,7 +648,7 @@ public class EdgeCaseTest {
 
     @Test
     public void dirtyAllFalse_probabilityZero() {
-        assertEquals(0.0, query1Group1Var("edge_dirty.ttl", PREFIX + """
+        assertEquals(0.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "allFalse" ; ex:flag ?flag .
@@ -658,7 +658,7 @@ public class EdgeCaseTest {
 
     @Test
     public void dirtyEmptyCondition_conditionalProbabilityNaN() {
-        double d = query1Group1Var("edge_dirty.ttl", PREFIX + """
+        double d = query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:p(?val > 15, ?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "emptyCond" ; ex:val ?val ; ex:flag ?flag .
@@ -670,7 +670,7 @@ public class EdgeCaseTest {
     @Test
     public void dirtyDuplicateValues_percentile() {
         // multi-valued ex:val 1,1,2 on one subject → three observations
-        assertEquals(2.0, query1Group1Var("edge_dirty.ttl", PREFIX + """
+        assertEquals(2.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:percentile(?val, 0.5) AS ?p)
                 WHERE {
                     ?s ex:case "dup" ; ex:val ?val .
@@ -681,7 +681,7 @@ public class EdgeCaseTest {
     @Test
     public void dirtyPercentileOutOfRange_throws() {
         assertThrows(RuntimeException.class, () ->
-                query1Group1Var("edge_dirty.ttl", PREFIX + """
+                query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                         SELECT (stat:percentile(?val, 1.5) AS ?p)
                         WHERE {
                             ?s ex:case "clean" ; ex:val ?val .
@@ -691,7 +691,7 @@ public class EdgeCaseTest {
 
     @Test
     public void dirtyClean_probabilityBaseline() {
-        assertEquals(2.0 / 3.0, query1Group1Var("edge_dirty.ttl", PREFIX + """
+        assertEquals(2.0 / 3.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
                 SELECT (stat:p(?val > 15) AS ?prob)
                 WHERE {
                     ?s ex:case "clean" ; ex:val ?val .
