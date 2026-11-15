@@ -1,24 +1,26 @@
-# Edge-case testing report
+# testing2 — edge-case findings
 
-This project adds statistics functions to SPARQL (query language for graph data): correlation, covariance, percentile, probability, chi-squared, and related helpers.
+Status of the SPARQL statistics edge suite in this repo (RDF4J aggregates: pearson, covariance, percentile / approx_median, probability, chi-squared).
 
-Earlier tests mostly copied the same happy-path pattern. We added **edge-case** coverage in four agenda points, with small handmade datasets (TTL under [`src/test/resources/custom-data/`](src/test/resources/custom-data/), table views under [`custom-data/`](custom-data/)) plus a few tests on real fixtures ([`cars.ttl`](src/test/resources/cars.ttl), [`cities.ttl`](src/test/resources/cities.ttl)).
+## Current layout
 
-All of this lives mainly in:
+| Piece | Where |
+|-------|--------|
+| Findings (this doc) | [`testing2.md`](testing2.md) |
+| Project overview | [`README.md`](README.md) |
+| Per-dataset EDA | [`eda/`](eda/) |
+| Line-by-line walkthrough | [`post analysis/`](post%20analysis/) |
+| Fixture table views | [`custom-data/`](custom-data/) |
+| Fixture TTL (what tests load) | [`src/test/resources/custom-data/`](src/test/resources/custom-data/) |
+| Edge tests (by function) | `*EdgeTest.java` under [`src/test/java/.../statistics_rdf4j/`](src/test/java/com/kari3600/me/statistics_rdf4j/) |
+| Shared helpers | [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, `assertUnboundAggregate`) |
 
-- Table views: [`custom-data/`](custom-data/)
-- TTL sources: [`src/test/resources/custom-data/`](src/test/resources/custom-data/)
-- Tests (by function):
-  - [`PearsonEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java)
-  - [`CovarianceEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java)
-  - [`PercentileEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java)
-  - [`ProbabilityEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java)
-  - [`ChiSquaredEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java)
-- Helpers: [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, `assertUnboundAggregate`)
+**How the suite is organized now**
 
-Full suite: **green** locally (`mvn test`).
-
-See also the project overview in [`README.md`](README.md).
+- Edge coverage is split **by SPARQL function**, not one monolith: `PearsonEdgeTest`, `CovarianceEdgeTest`, `PercentileEdgeTest`, `ProbabilityEdgeTest`, `ChiSquaredEdgeTest`.
+- Handmade fixtures are named **`pairs` / `chi` / `tiny` / `groups` / `dirty`** (no `EDGE_` / `edge_` prefixes).
+- Method names drop old `result` / agenda suffixes; natural controls (cars/cities) stay first where relevant.
+- Full suite: **green** locally (`mvn test`, `mvn test "-Dtest=*EdgeTest"`).
 
 ---
 
@@ -42,6 +44,8 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 | [`groups`](custom-data/groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
 | [`dirty`](custom-data/dirty.md) | #4 | Dirty / weird typed values |
 
+EDA for these (and the natural DBpedia-style fixtures) lives under [`eda/`](eda/).
+
 ---
 
 ## Agenda #1 — Incomplete / null pairs
@@ -50,10 +54,10 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 
 What if we correlate something like `[0, 1]` with missing partners — one side has numbers, the other is blank?
 
-### What the code does (simple)
+### What the code does
 
 - **OPTIONAL tests:** allow missing values in, call `stat:pearson` / `covariance` / `percentile` / `p` / etc.
-- **Assert:** usually one result row with the answer variable **unbound** (empty).
+- **Assert:** usually one result row with the answer variable **unbound** (empty) via `assertUnboundAggregate`.
 - **REQUIRED tests:** both properties required → incompletes disappear; known numbers (e.g. perfect line → pearson `1.0`).
 - **Natural fixtures:** same idea on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
 
@@ -115,6 +119,8 @@ Almost no data — too few points or no spread for correlation.
 - Empty **`FILTER`** → NaN (bound), not unbound.
 - Multi-aggregate **`SELECT`** (pearson + covariance + count) works on a healthy group.
 
+Covered mainly in `PearsonEdgeTest` (`richerGroupBy_pearson`, `richerFilterEmpties_pearson`, `richerMultiAggregate_pearson`).
+
 ---
 
 ## Agenda #4 — Dirty / weird values
@@ -136,20 +142,20 @@ Almost no data — too few points or no spread for correlation.
 
 ## Code map
 
-```
+```text
 custom-data/*.md                      # table views (docs)
 src/test/resources/custom-data/*.ttl  # TTL sources (tests)
 
-src/test/java/.../*EdgeTest.java   (split by SPARQL function)
-  PearsonEdgeTest      → pearson (#1–#4 slices)
-  CovarianceEdgeTest   → covariance
-  PercentileEdgeTest   → percentile / approx_median
-  ProbabilityEdgeTest  → p / conditional p
-  ChiSquaredEdgeTest   → chi_sq
+*EdgeTest.java                        # ~52 edge tests, by function
+  PearsonEdgeTest      (~16)  pearson (#1–#4 slices)
+  CovarianceEdgeTest   (~12)  covariance
+  PercentileEdgeTest   (~11)  percentile / approx_median
+  ProbabilityEdgeTest  (~10)  p / conditional p
+  ChiSquaredEdgeTest   (~3)   chi_sq
 
-src/test/java/.../TestUtil.java
-  query1Group1Var       → one number
-  queryAll              → multi-row / unbound checks
+TestUtil.java
+  query1Group1Var        → one number
+  queryAll               → multi-row / unbound checks
   assertUnboundAggregate → single unbound aggregate row
 ```
 
@@ -168,7 +174,17 @@ Happy-path clones on DBpedia-style data remain; these edge tests add the interes
 
 ---
 
-## Out of scope (next)
+## Done vs still open
 
-- EDA writeup per existing DBpedia-style dataset.
-- Changing library behavior (tests document current behavior; they don’t fix NaN/NPE/unbound policies).
+| Done | Notes |
+|------|--------|
+| Agendas #1–#4 encoded as tests | Green under `*EdgeTest` |
+| Suite split by function | Replaces former single `EdgeCaseTest` |
+| Fixture rename + table views | `pairs` / `chi` / `tiny` / `groups` / `dirty` |
+| Per-dataset EDA | [`eda/`](eda/) |
+| Walkthrough docs | [`post analysis/`](post%20analysis/) (00–06) |
+
+| Still open | Notes |
+|------------|--------|
+| Changing library behavior | Tests **document** current NaN / NPE / unbound policies; they do not fix them |
+| Happy-path / `src/main` deep dive | Optional; not part of this edge report |

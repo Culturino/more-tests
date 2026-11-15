@@ -20,7 +20,7 @@ These docs are for humans. They do not run tests. The real code lives under `src
 ## Related project docs
 
 - [README.md](../README.md) — project overview
-- [EDGE_CASE_REPORT.md](../EDGE_CASE_REPORT.md) — edge-case findings
+- [testing2.md](../testing2.md) — edge-case findings
 - [eda/](../eda/) — per-dataset EDA
 - Table views of handmade data: [custom-data/](../custom-data/)
 

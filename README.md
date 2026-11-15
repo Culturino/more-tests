@@ -13,7 +13,7 @@
 Further docs:
 
 - **[eda/](eda/)** — per-dataset EDA (counts, completeness, value kinds)
-- **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)** — edge-case agendas #1–#4 findings
+- **[testing2.md](testing2.md)** — edge-case agendas #1–#4 findings (current suite)
 - **[post analysis/](post%20analysis/)** — plain-language line-by-line walkthrough of the new edge tests
 
 Handmade edge fixtures: **TTL sources** in [`src/test/resources/custom-data/`](src/test/resources/custom-data/), **table views** in [`custom-data/`](custom-data/) (see [§7.1](#71-custom-data-handmade-edge-fixtures)).
@@ -132,7 +132,7 @@ Factories are registered via Java SPI under:
 ```text
 more-tests/
 ├── README.md
-├── EDGE_CASE_REPORT.md
+├── testing2.md
 ├── eda/                      ← per-dataset EDA write-ups
 ├── post analysis/            ← line-by-line edge-test walkthrough
 ├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
@@ -247,7 +247,7 @@ mvn test "-Dtest=*EdgeTest"
 
 ## 9. Edge-case agenda (four points)
 
-Full narrative: **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)**.
+Full narrative: **[testing2.md](testing2.md)**.
 
 ### Agenda #1 — Incomplete / null pairs
 
@@ -372,7 +372,7 @@ This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMi
 | Doc | Contents |
 |-----|----------|
 | [eda/](eda/) | Per-dataset EDA write-ups |
-| [EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md) | Full write-up of agendas #1–#4 |
+| [testing2.md](testing2.md) | Full write-up of agendas #1–#4 (current suite) |
 | [custom-data/](custom-data/) | Table views of handmade edge fixtures |
 | [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |
 | [README.md](README.md) | This overview |
