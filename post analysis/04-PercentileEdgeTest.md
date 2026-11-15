@@ -8,7 +8,7 @@ Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java
 
 Imagine lining up all the numbers from smallest to biggest.
 
-- **`stat:percentile(?x, 0.5)`** — “What value sits at the 50% mark?”  
+- **`stat:approx_percentile(?x, 0.5)`** — “What value sits at the 50% mark?”  
   `0.5` = halfway; `0.9` = “90% of values are below this.”
 - **`stat:approx_median(?x)`** — approximate median (same family under the hood).
 
@@ -118,7 +118,7 @@ One subject with multi-valued `ex:val` = `1, 1, 2` → three observations. Locke
 #### `dirtyPercentileOutOfRange`
 
 ```java
-stat:percentile(?val, 1.5)   // not in 0..1
+stat:approx_percentile(?val, 1.5)   // not in 0..1
 assertThrows(RuntimeException.class, ...)
 ```
 

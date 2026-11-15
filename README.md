@@ -8,7 +8,8 @@
 | **Branch** | `develop` |
 | **Language** | Java 25 |
 | **Build** | Maven |
-| **RDF4J (this checkout)** | `6.2.0-M2` (local/runnable) |
+| **Upstream** | https://github.com/Kari3600/statistics-rdf4j |
+| **RDF4J (this checkout)** | `6.2.0-SNAPSHOT` via Kari GitHub Packages |
 
 Further docs:
 
@@ -114,7 +115,7 @@ PREFIX stat: <http://me.kari3600.com/statistics-rdf4j#>
 | `stat:pearson_population` | 2 | Population variant of pearson |
 | `stat:covariance` | 2 | Sample covariance (same idea as correlation, not scaled to −1…1) |
 | `stat:covariance_population` | 2 | Population covariance |
-| `stat:percentile` | 2 | Approximate percentile via T-Digest: `(valueVar, p)` with `p` in `[0, 1]` |
+| `stat:approx_percentile` | 2 | Approximate percentile via T-Digest: `(valueVar, p)` with `p` in `[0, 1]` |
 | `stat:approx_median` | 1 | Approximate median (T-Digest) |
 | `stat:p` | 1 | Probability / fraction of rows where a boolean expression is true |
 | `stat:p` | 2 | Conditional probability: `p(event, condition)` |
@@ -357,13 +358,13 @@ assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
 
 | Dependency | Role |
 |------------|------|
-| `org.eclipse.rdf4j:*-6.2.0-M2` | RDF4J APIs + in-memory sail for tests |
+| `org.eclipse.rdf4j:*-6.2.0-SNAPSHOT` | Kari-forked RDF4J APIs + in-memory sail (GitHub Packages) |
 | `commons-math3` | Multivariate summary stats (pearson / covariance) |
 | `datasketches-java` | T-Digest for approx percentile / median |
-| `com.kari3600.me:Utils` | Combinatorics helper used by chi-squared |
+| `com.kari3600.me:utils` | Combinatorics helper used by chi-squared (GitHub Packages) |
 | JUnit 5 | Tests |
 
-This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMin/MaxNumberOfArguments()` so tests run without a private SNAPSHOT build. The `Utils` artifact must be present in the local Maven repository.
+`src/main` tracks **[Kari3600/statistics-rdf4j](https://github.com/Kari3600/statistics-rdf4j)** unchanged. RDF4J/`utils` resolve from Kari’s GitHub Packages (`maven.pkg.github.com`); Maven needs a token with `read:packages` in `~/.m2/settings.xml` for servers `github-rdf4j` and `github-utils`.
 
 ---
 
@@ -373,6 +374,7 @@ This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMi
 |-----|----------|
 | [eda/](eda/) | Per-dataset EDA write-ups |
 | [testing2.md](testing2.md) | Full write-up of agendas #1–#4 (current suite) |
+| [edge-suite-report.md](edge-suite-report.md) | Short findings + correctness verdict |
 | [custom-data/](custom-data/) | Table views of handmade edge fixtures |
 | [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |
 | [README.md](README.md) | This overview |

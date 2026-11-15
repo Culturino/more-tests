@@ -8,23 +8,39 @@
     <packaging>jar</packaging>
 
     <properties>
+        <!-- Upstream uses 23; this machine runs Temurin 25. -->
         <maven.compiler.target>25</maven.compiler.target>
         <maven.compiler.source>25</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>github-utils</id>
+            <url>https://maven.pkg.github.com/Kari3600/Utils</url>
+        </repository>
+        <!--
+        Temporary repository until the fork changes get pulled into main
+        -->
+        <repository>
+            <id>github-rdf4j</id>
+            <url>https://maven.pkg.github.com/Kari3600/rdf4j</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-queryalgebra-evaluation</artifactId>
-            <version>6.2.0-M2</version>
+            <version>6.2.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.kari3600.me</groupId>
-            <artifactId>Utils</artifactId>
+            <artifactId>utils</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <!-- Needed by upstream collectors; not declared in upstream pom. -->
         <dependency>
             <groupId>org.apache.datasketches</groupId>
             <artifactId>datasketches-java</artifactId>
@@ -45,15 +61,14 @@
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-repository-sail</artifactId>
-            <version>6.2.0-M2</version>
+            <version>6.2.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
             <artifactId>rdf4j-sail-memory</artifactId>
-            <version>6.2.0-M2</version>
+            <version>6.2.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

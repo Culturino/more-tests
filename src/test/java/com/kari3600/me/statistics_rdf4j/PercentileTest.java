@@ -12,7 +12,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?magnitude, 0.9) AS ?percentile)
+                SELECT (stat:approx_percentile(?magnitude, 0.9) AS ?percentile)
                 WHERE {
                     ?city a dbo:Earthquake ;
                     dbp:magnitude ?magnitude .
@@ -22,7 +22,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?magnitude, 0.1) AS ?percentile)
+                SELECT (stat:approx_percentile(?magnitude, 0.1) AS ?percentile)
                 WHERE {
                     ?city a dbo:Earthquake ;
                     dbp:magnitude ?magnitude .
@@ -36,7 +36,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?length, 0.5) AS ?percentile)
+                SELECT (stat:approx_percentile(?length, 0.5) AS ?percentile)
                 WHERE {
                     ?car a dbo:Automobile ;
                     dbp:length ?length .
@@ -50,7 +50,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?runtime, 0.5) AS ?percentile)
+                SELECT (stat:approx_percentile(?runtime, 0.5) AS ?percentile)
                 WHERE {
                     ?film a dbo:Film ;
                     dbo:runtime ?runtime .
@@ -64,7 +64,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?elevation, 0.5) AS ?percentile)
+                SELECT (stat:approx_percentile(?elevation, 0.5) AS ?percentile)
                 WHERE {
                     ?airport a dbo:Airport ;
                     dbo:elevation ?elevation .
@@ -78,7 +78,7 @@ public class PercentileTest {
                 """
                 PREFIX dbo: <http://dbpedia.org/ontology/>
                 PREFIX dbp: <http://dbpedia.org/property/>
-                SELECT (stat:percentile(?elevation, 0.5) AS ?percentile)
+                SELECT (stat:approx_percentile(?elevation, 0.5) AS ?percentile)
                 WHERE {
                     ?mountain a dbo:Mountain ;
                     dbo:elevation ?elevation .

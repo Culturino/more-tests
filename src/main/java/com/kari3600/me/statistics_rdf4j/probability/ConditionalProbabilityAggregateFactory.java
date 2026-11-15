@@ -11,30 +11,18 @@ import org.eclipse.rdf4j.query.parser.sparql.aggregate.AggregateNAryFunctionFact
 import java.util.function.BiFunction;
 
 public class ConditionalProbabilityAggregateFactory implements AggregateNAryFunctionFactory {
-    private static final int ARITY = 2;
-
     @Override
     public String getIri() {
         return StatisticsRDF4J.IRI + "p";
     }
 
     @Override
-    public int getMinNumberOfArguments() {
-        return ARITY;
+    public AggregateNAryFunction buildFunction(int i, BiFunction<Integer, BindingSet, Value> biFunction) {
+        return new SimpleAggregateNAryFunction(biFunction, i);
     }
 
     @Override
-    public int getMaxNumberOfArguments() {
-        return ARITY;
-    }
-
-    @Override
-    public AggregateNAryFunction buildFunction(BiFunction<Integer, BindingSet, Value> biFunction) {
-        return new SimpleAggregateNAryFunction(biFunction, ARITY);
-    }
-
-    @Override
-    public AggregateCollector getCollector() {
+    public AggregateCollector getCollector(int i) {
         return new ConditionalProbabilityCollector();
     }
 }
