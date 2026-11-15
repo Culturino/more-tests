@@ -1,6 +1,6 @@
 # EDA (per dataset)
 
-One write-up per fixture. Charts (SVG) also live in this folder.
+One write-up per fixture.
 
 | Dataset | File |
 |---------|------|

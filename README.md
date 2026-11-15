@@ -133,7 +133,7 @@ Factories are registered via Java SPI under:
 more-tests/
 ├── README.md
 ├── EDGE_CASE_REPORT.md
-├── eda/                      ← per-dataset EDA write-ups (+ charts)
+├── eda/                      ← per-dataset EDA write-ups
 ├── post analysis/            ← line-by-line edge-test walkthrough
 ├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
 ├── pom.xml
