@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="320" viewBox="0 0 420 320" role="img" aria-label="cars — length × weight">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="210.0" y="28" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="600" fill="#1a1a1a">cars — length × weight</text>
+<path d="M 140 175 L 140.00 80.00 A 95 95 0 0 1 210.02 239.20 Z" fill="#2F6FED"/>
+<path d="M 140 175 L 210.02 239.20 A 95 95 0 1 1 140.00 80.00 Z" fill="#C45C26"/>
+<rect x="270" y="70" width="12" height="12" fill="#2F6FED"/>
+<text x="290" y="81" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#333">both: 60 (37%)</text>
+<rect x="270" y="94" width="12" height="12" fill="#C45C26"/>
+<text x="290" y="105" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#333">length only: 103 (63%)</text>
+</svg>

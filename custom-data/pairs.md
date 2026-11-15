@@ -1,8 +1,8 @@
-# edge_pairs
+# pairs
 
 Agenda **#1** — incomplete math / english score pairs.
 
-Source TTL: [`src/test/resources/custom-data/edge_pairs.ttl`](../src/test/resources/custom-data/edge_pairs.ttl)
+Source TTL: [`src/test/resources/custom-data/pairs.ttl`](../src/test/resources/custom-data/pairs.ttl)
 
 | id | type | math | english | note |
 |----|------|------|---------|------|

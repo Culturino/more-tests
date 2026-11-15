@@ -1,8 +1,8 @@
-# edge_chi
+# chi
 
 Agenda **#1** — tiny categorical table for `chi_sq` with incomplete rows.
 
-Source TTL: [`src/test/resources/custom-data/edge_chi.ttl`](../src/test/resources/custom-data/edge_chi.ttl)
+Source TTL: [`src/test/resources/custom-data/chi.ttl`](../src/test/resources/custom-data/chi.ttl)
 
 | id | type | label | gender | order |
 |----|------|-------|--------|-------|

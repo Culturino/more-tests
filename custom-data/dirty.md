@@ -1,8 +1,8 @@
-# edge_dirty
+# dirty
 
 Agenda **#4** — dirty / weird values.
 
-Source TTL: [`src/test/resources/custom-data/edge_dirty.ttl`](../src/test/resources/custom-data/edge_dirty.ttl)
+Source TTL: [`src/test/resources/custom-data/dirty.ttl`](../src/test/resources/custom-data/dirty.ttl)
 
 | id | case | val | other | flag | note |
 |----|------|-----|-------|------|------|

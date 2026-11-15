@@ -12,8 +12,9 @@
 
 Further docs:
 
-- **[EDA_REPORT.md](EDA_REPORT.md)** — exploratory analysis of every fixture (completeness, ranges, missingness)
+- **[EDA_REPORT.md](EDA_REPORT.md)** — exploratory analysis of every fixture (completeness, ranges, missingness, charts)
 - **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)** — edge-case agendas #1–#4 findings
+- **[post analysis/](post%20analysis/)** — plain-language line-by-line walkthrough of the new edge tests
 
 Handmade edge fixtures: **TTL sources** in [`src/test/resources/custom-data/`](src/test/resources/custom-data/), **table views** in [`custom-data/`](custom-data/) (see [§7.1](#71-custom-data-handmade-edge-fixtures)).
 
@@ -190,13 +191,13 @@ Numeric conversion goes through `CollectorUtil.asDouble`. Bad or unbound values 
 
 | Table view | Agenda | Purpose |
 |------------|--------|---------|
-| [`edge_pairs`](custom-data/edge_pairs.md) | #1 | Students with `math` / `english`; one-sided and both-missing rows (incomplete-pair / “null” case) |
-| [`edge_chi`](custom-data/edge_chi.md) | #1 | Tiny gender × order table plus incomplete persons for `chi_sq` |
-| [`edge_tiny`](custom-data/edge_tiny.md) | #2 | `ex:case` slices: empty / single / identical / constantX / two |
-| [`edge_groups`](custom-data/edge_groups.md) | #3 | Groups A–D for `GROUP BY`, empty `FILTER`, multi-aggregate |
-| [`edge_dirty`](custom-data/edge_dirty.md) | #4 | Strings-as-numbers, mixed types, flags, duplicates, empty condition |
+| [`pairs`](custom-data/pairs.md) | #1 | Students with `math` / `english`; one-sided and both-missing rows (incomplete-pair / “null” case) |
+| [`chi`](custom-data/chi.md) | #1 | Tiny gender × order table plus incomplete persons for `chi_sq` |
+| [`tiny`](custom-data/tiny.md) | #2 | `ex:case` slices: empty / single / identical / constantX / two |
+| [`groups`](custom-data/groups.md) | #3 | Groups A–D for `GROUP BY`, empty `FILTER`, multi-aggregate |
+| [`dirty`](custom-data/dirty.md) | #4 | Strings-as-numbers, mixed types, flags, duplicates, empty condition |
 
-In tests, load the TTL classpath paths, e.g. `"custom-data/edge_pairs.ttl"`.
+In tests, load the TTL classpath paths, e.g. `"custom-data/pairs.ttl"`.
 
 ### 7.2 Natural / DBpedia-style fixtures
 
@@ -214,7 +215,7 @@ Under [`src/test/resources/`](src/test/resources/), used by happy-path tests:
 | [`universities.ttl`](src/test/resources/universities.ttl) | Universities | students, endowment |
 | [`GFG_example.ttl`](src/test/resources/GFG_example.ttl) | Tiny chi-squared demo | gender × ice-cream order |
 
-These graphs are **imperfect on purpose**. Happy-path queries usually **require** both variables, so incompletes are silently dropped. Edge tests also reuse [`cars.ttl`](src/test/resources/cars.ttl) and [`cities.ttl`](src/test/resources/cities.ttl) via `EDGE_*` methods with `OPTIONAL`.
+These graphs are **imperfect on purpose**. Happy-path queries usually **require** both variables, so incompletes are silently dropped. Edge tests also reuse [`cars.ttl`](src/test/resources/cars.ttl) and [`cities.ttl`](src/test/resources/cities.ttl) with `OPTIONAL`.
 
 ---
 
@@ -233,7 +234,7 @@ These graphs are **imperfect on purpose**. Happy-path queries usually **require*
 | [`ProbabilityEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java) | Edge cases for `stat:p` | 10 |
 | [`ChiSquaredEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java) | Edge cases for `stat:chi_sq` | 3 |
 
-**Naming:** edge methods on natural data start with `EDGE_` (e.g. `EDGE_carsOptionalMissingWeight_pearson`). Edge classes are split **by function**, not by agenda.
+**Naming:** edge classes are split **by function** (e.g. `carsOptionalMissingWeight_pearson` in `PearsonEdgeTest`), not by agenda.
 
 ```bash
 mvn test
@@ -251,20 +252,20 @@ Full narrative: **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)**.
 
 **Question:** What if we force missing values into the aggregate with `OPTIONAL`?
 
-**Example:** correlate math `[0, 1]` with english missing ([`edge_pairs`](custom-data/edge_pairs.md) alice & bob).
+**Example:** correlate math `[0, 1]` with english missing ([`pairs`](custom-data/pairs.md) alice & bob).
 
 | Behavior | Result |
 |----------|--------|
 | Most numeric aggregates + unbound arg | **Unbound** answer (empty) |
 | One unbound row in a mixed group | **Poisons** the whole group |
 | Required patterns | Incompletes **dropped**; known floats on the complete subset |
-| `chi_sq` + OPTIONAL ([`edge_chi`](custom-data/edge_chi.md)) | Still returns a **number** |
+| `chi_sq` + OPTIONAL ([`chi`](custom-data/chi.md)) | Still returns a **number** |
 
-Also covered on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl) via `EDGE_*`.
+Also covered on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
 
 ### Agenda #2 — Tiny / empty groups
 
-Dataset: [`edge_tiny`](custom-data/edge_tiny.md).
+Dataset: [`tiny`](custom-data/tiny.md).
 
 | Slice | pearson | covariance | notes |
 |-------|---------|------------|--------|
@@ -275,7 +276,7 @@ Dataset: [`edge_tiny`](custom-data/edge_tiny.md).
 
 ### Agenda #3 — Richer queries
 
-Dataset: [`edge_groups`](custom-data/edge_groups.md).
+Dataset: [`groups`](custom-data/groups.md).
 
 1. **`GROUP BY ?g`** with pearson + `COUNT(*)` — A→1.0, B/C→NaN, D absent  
 2. **`FILTER` that removes all rows** — pearson → NaN  
@@ -283,7 +284,7 @@ Dataset: [`edge_groups`](custom-data/edge_groups.md).
 
 ### Agenda #4 — Dirty / weird values
 
-Dataset: [`edge_dirty`](custom-data/edge_dirty.md).
+Dataset: [`dirty`](custom-data/dirty.md).
 
 | Input | Observed |
 |-------|----------|
@@ -333,7 +334,7 @@ assertEquals(expected, query1Group1Var("cars.ttl", """
 ### Edge (unbound) on custom data
 
 ```java
-assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
+assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
         SELECT (stat:pearson(?math, ?english) AS ?corr)
         WHERE {
             ?student ex:math ?math .
@@ -345,7 +346,7 @@ assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
 ### Tips
 
 1. Prefer a new TTL under [`src/test/resources/custom-data/`](src/test/resources/custom-data/) (and a matching table in [`custom-data/`](custom-data/)).
-2. Reuse natural TTLs with an `EDGE_` name when the mess already exists.
+2. Reuse natural TTLs (cars/cities) when the mess already exists.
 3. Lock expecteds to **observed** behavior.
 4. Compute expected floats independently on tiny sets.
 

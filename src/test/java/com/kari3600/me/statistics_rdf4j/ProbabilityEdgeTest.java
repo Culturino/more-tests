@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Edge cases for {@code stat:p} (probability / conditional probability).
- * Fixtures: custom-data/edge_pairs, edge_tiny, edge_dirty; cars/cities.
+ * Fixtures: custom-data/pairs, tiny, dirty; cars/cities.
  */
 public class ProbabilityEdgeTest {
 
@@ -22,8 +22,10 @@ public class ProbabilityEdgeTest {
             PREFIX dbp: <http://dbpedia.org/property/>
             """;
 
+    // --- OPTIONAL on natural + handmade ---
+
     @Test
-    public void EDGE_carsOptionalMissingWeight_probability() {
+    public void carsOptionalMissingWeight_probability() {
         assertUnboundAggregate("cars.ttl", DBPEDIA + """
                 SELECT (stat:p(?weight > 1000) AS ?prob)
                 WHERE {
@@ -34,7 +36,7 @@ public class ProbabilityEdgeTest {
     }
 
     @Test
-    public void EDGE_carsOptionalMissingWeight_conditionalProbability() {
+    public void carsOptionalMissingWeight_conditionalProbability() {
         assertUnboundAggregate("cars.ttl", DBPEDIA + """
                 SELECT (stat:p(?weight > 1000, ?length > 100) AS ?prob)
                 WHERE {
@@ -46,7 +48,7 @@ public class ProbabilityEdgeTest {
     }
 
     @Test
-    public void EDGE_citiesOptionalMissingElevation_probability() {
+    public void citiesOptionalMissingElevation_probability() {
         assertUnboundAggregate("cities.ttl", DBPEDIA + """
                 SELECT (stat:p(?elevation > 1000) AS ?prob)
                 WHERE {
@@ -57,8 +59,8 @@ public class ProbabilityEdgeTest {
     }
 
     @Test
-    public void EDGE_edgePairsOptionalEnglish_probability() {
-        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
+    public void pairsOptionalEnglish_probability() {
+        assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:p(?english > 5) AS ?prob)
                 WHERE {
                     ?student a ex:Student .
@@ -67,9 +69,11 @@ public class ProbabilityEdgeTest {
                 """, "prob");
     }
 
+    // --- tiny ---
+
     @Test
-    public void tinyEmpty_probabilityNaN() {
-        double d = query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
+    public void tinyEmpty_probability() {
+        double d = query1Group1Var("custom-data/tiny.ttl", PREFIX + """
                 SELECT (stat:p(?x > 0) AS ?prob)
                 WHERE {
                     VALUES ?s { ex:empty2 ex:empty3 }
@@ -79,19 +83,21 @@ public class ProbabilityEdgeTest {
         assertTrue(Double.isNaN(d), "expected NaN for empty probability, got " + d);
     }
 
+    // --- dirty: healthy controls then edges ---
+
     @Test
-    public void dirtyRawBooleanFlag_probabilityUnbound() {
-        assertUnboundAggregate("custom-data/edge_dirty.ttl", PREFIX + """
-                SELECT (stat:p(?flag) AS ?prob)
+    public void dirtyClean_probability() {
+        assertEquals(2.0 / 3.0, query1Group1Var("custom-data/dirty.ttl", PREFIX + """
+                SELECT (stat:p(?val > 15) AS ?prob)
                 WHERE {
-                    ?s ex:case "allTrue" ; ex:flag ?flag .
+                    ?s ex:case "clean" ; ex:val ?val .
                 }
-                """, "prob");
+                """, "prob").doubleValue(), 1e-9);
     }
 
     @Test
-    public void dirtyAllTrue_probabilityOne() {
-        assertEquals(1.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
+    public void dirtyAllTrue_probability() {
+        assertEquals(1.0, query1Group1Var("custom-data/dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "allTrue" ; ex:flag ?flag .
@@ -100,8 +106,8 @@ public class ProbabilityEdgeTest {
     }
 
     @Test
-    public void dirtyAllFalse_probabilityZero() {
-        assertEquals(0.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
+    public void dirtyAllFalse_probability() {
+        assertEquals(0.0, query1Group1Var("custom-data/dirty.ttl", PREFIX + """
                 SELECT (stat:p(?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "allFalse" ; ex:flag ?flag .
@@ -110,23 +116,23 @@ public class ProbabilityEdgeTest {
     }
 
     @Test
-    public void dirtyEmptyCondition_conditionalProbabilityNaN() {
-        double d = query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
+    public void dirtyRawBooleanFlag_probability() {
+        assertUnboundAggregate("custom-data/dirty.ttl", PREFIX + """
+                SELECT (stat:p(?flag) AS ?prob)
+                WHERE {
+                    ?s ex:case "allTrue" ; ex:flag ?flag .
+                }
+                """, "prob");
+    }
+
+    @Test
+    public void dirtyEmptyCondition_conditionalProbability() {
+        double d = query1Group1Var("custom-data/dirty.ttl", PREFIX + """
                 SELECT (stat:p(?val > 15, ?flag = true) AS ?prob)
                 WHERE {
                     ?s ex:case "emptyCond" ; ex:val ?val ; ex:flag ?flag .
                 }
                 """, "prob").doubleValue();
         assertTrue(Double.isNaN(d), "expected NaN when condition never matches, got " + d);
-    }
-
-    @Test
-    public void dirtyClean_probabilityBaseline() {
-        assertEquals(2.0 / 3.0, query1Group1Var("custom-data/edge_dirty.ttl", PREFIX + """
-                SELECT (stat:p(?val > 15) AS ?prob)
-                WHERE {
-                    ?s ex:case "clean" ; ex:val ?val .
-                }
-                """, "prob").doubleValue(), 1e-9);
     }
 }

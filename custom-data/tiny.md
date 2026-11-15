@@ -1,8 +1,8 @@
-# edge_tiny
+# tiny
 
 Agenda **#2** — degenerate / tiny groups. Slice with `ex:case`.
 
-Source TTL: [`src/test/resources/custom-data/edge_tiny.ttl`](../src/test/resources/custom-data/edge_tiny.ttl)
+Source TTL: [`src/test/resources/custom-data/tiny.ttl`](../src/test/resources/custom-data/tiny.ttl)
 
 | id | case | x | y | note |
 |----|------|---|---|------|

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Edge cases for {@code stat:covariance}.
- * Fixtures: custom-data/edge_pairs, edge_tiny; cars/cities.
+ * Fixtures: custom-data/pairs, tiny; cars/cities.
  */
 public class CovarianceEdgeTest {
 
@@ -21,8 +21,8 @@ public class CovarianceEdgeTest {
             PREFIX dbp: <http://dbpedia.org/property/>
             """;
 
-    private static void assertTinyCovarianceZero(String caseName) {
-        assertEquals(0.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
+    private static void assertTinyCovariance(String caseName) {
+        assertEquals(0.0, query1Group1Var("custom-data/tiny.ttl", PREFIX + """
                 SELECT (stat:covariance(?x, ?y) AS ?cov)
                 WHERE {
                     ?s ex:case "%s" ;
@@ -32,33 +32,11 @@ public class CovarianceEdgeTest {
                 """.formatted(caseName), "cov").doubleValue(), 1e-12);
     }
 
-    @Test
-    public void optionalAllYMissing_covariance() {
-        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
-                SELECT (stat:covariance(?math, ?english) AS ?cov)
-                WHERE {
-                    VALUES ?student { ex:alice ex:bob }
-                    ?student ex:math ?math .
-                    OPTIONAL { ?student ex:english ?english }
-                }
-                """, "cov");
-    }
-
-    @Test
-    public void optionalMixed_covariancePoisonsOnUnbound() {
-        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
-                SELECT (stat:covariance(?math, ?english) AS ?cov)
-                WHERE {
-                    ?student a ex:Student ;
-                        ex:math ?math .
-                    OPTIONAL { ?student ex:english ?english }
-                }
-                """, "cov");
-    }
+    // --- pairs: healthy controls ---
 
     @Test
     public void requiredPerfectLine_covariance() {
-        assertEquals(25.833333333333332, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
+        assertEquals(25.833333333333332, query1Group1Var("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:covariance(?math, ?english) AS ?cov)
                 WHERE {
                     VALUES ?student { ex:cara ex:dan ex:ella ex:finn }
@@ -70,7 +48,7 @@ public class CovarianceEdgeTest {
 
     @Test
     public void requiredAllComplete_covariance() {
-        assertEquals(9.933333333333334, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
+        assertEquals(9.933333333333334, query1Group1Var("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:covariance(?math, ?english) AS ?cov)
                 WHERE {
                     ?student a ex:Student ;
@@ -80,20 +58,36 @@ public class CovarianceEdgeTest {
                 """, "cov").doubleValue(), 1e-6);
     }
 
+    // --- pairs: edge cases ---
+
     @Test
-    public void EDGE_carsOptionalMissingWeight_covariance() {
-        assertUnboundAggregate("cars.ttl", DBPEDIA + """
-                SELECT (stat:covariance(?length, ?weight) AS ?cov)
+    public void optionalAllYMissing_covariance() {
+        assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
+                SELECT (stat:covariance(?math, ?english) AS ?cov)
                 WHERE {
-                    ?car a dbo:Automobile ;
-                        dbp:length ?length .
-                    OPTIONAL { ?car dbp:weight ?weight }
+                    VALUES ?student { ex:alice ex:bob }
+                    ?student ex:math ?math .
+                    OPTIONAL { ?student ex:english ?english }
                 }
                 """, "cov");
     }
 
     @Test
-    public void EDGE_carsRequiredComplete_covarianceStillWorks() {
+    public void optionalMixed_covariance() {
+        assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
+                SELECT (stat:covariance(?math, ?english) AS ?cov)
+                WHERE {
+                    ?student a ex:Student ;
+                        ex:math ?math .
+                    OPTIONAL { ?student ex:english ?english }
+                }
+                """, "cov");
+    }
+
+    // --- cars / cities: healthy control then edges ---
+
+    @Test
+    public void carsRequiredComplete_covariance() {
         assertEquals(21770421.170564972, query1Group1Var("cars.ttl", DBPEDIA + """
                 SELECT (stat:covariance(?length, ?weight) AS ?cov)
                 WHERE {
@@ -105,7 +99,19 @@ public class CovarianceEdgeTest {
     }
 
     @Test
-    public void EDGE_citiesOptionalMissingElevation_covariance() {
+    public void carsOptionalMissingWeight_covariance() {
+        assertUnboundAggregate("cars.ttl", DBPEDIA + """
+                SELECT (stat:covariance(?length, ?weight) AS ?cov)
+                WHERE {
+                    ?car a dbo:Automobile ;
+                        dbp:length ?length .
+                    OPTIONAL { ?car dbp:weight ?weight }
+                }
+                """, "cov");
+    }
+
+    @Test
+    public void citiesOptionalMissingElevation_covariance() {
         assertUnboundAggregate("cities.ttl", DBPEDIA + """
                 SELECT (stat:covariance(?population, ?elevation) AS ?cov)
                 WHERE {
@@ -116,33 +122,35 @@ public class CovarianceEdgeTest {
                 """, "cov");
     }
 
-    @Test
-    public void tinyEmpty_covarianceZero() {
-        assertTinyCovarianceZero("empty");
-    }
+    // --- tiny: healthy control then edges ---
 
     @Test
-    public void tinySingle_covarianceZero() {
-        assertTinyCovarianceZero("single");
-    }
-
-    @Test
-    public void tinyIdentical_covarianceZero() {
-        assertTinyCovarianceZero("identical");
-    }
-
-    @Test
-    public void tinyConstantX_covarianceZero() {
-        assertTinyCovarianceZero("constantX");
-    }
-
-    @Test
-    public void tinyTwo_covarianceOne() {
-        assertEquals(1.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
+    public void tinyTwo_covariance() {
+        assertEquals(1.0, query1Group1Var("custom-data/tiny.ttl", PREFIX + """
                 SELECT (stat:covariance(?x, ?y) AS ?cov)
                 WHERE {
                     ?s ex:case "two" ; ex:x ?x ; ex:y ?y .
                 }
                 """, "cov").doubleValue(), 1e-9);
+    }
+
+    @Test
+    public void tinyEmpty_covariance() {
+        assertTinyCovariance("empty");
+    }
+
+    @Test
+    public void tinySingle_covariance() {
+        assertTinyCovariance("single");
+    }
+
+    @Test
+    public void tinyIdentical_covariance() {
+        assertTinyCovariance("identical");
+    }
+
+    @Test
+    public void tinyConstantX_covariance() {
+        assertTinyCovariance("constantX");
     }
 }

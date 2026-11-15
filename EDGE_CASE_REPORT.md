@@ -36,11 +36,11 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 
 | File | Agenda | Role |
 |------|--------|------|
-| [`edge_pairs`](custom-data/edge_pairs.md) | #1 | Students with `math` / `english`; some missing one or both |
-| [`edge_chi`](custom-data/edge_chi.md) | #1 | Tiny gender×order table with incomplete people |
-| [`edge_tiny`](custom-data/edge_tiny.md) | #2 | Degenerate sizes via `ex:case` |
-| [`edge_groups`](custom-data/edge_groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
-| [`edge_dirty`](custom-data/edge_dirty.md) | #4 | Dirty / weird typed values |
+| [`pairs`](custom-data/pairs.md) | #1 | Students with `math` / `english`; some missing one or both |
+| [`chi`](custom-data/chi.md) | #1 | Tiny gender×order table with incomplete people |
+| [`tiny`](custom-data/tiny.md) | #2 | Degenerate sizes via `ex:case` |
+| [`groups`](custom-data/groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
+| [`dirty`](custom-data/dirty.md) | #4 | Dirty / weird typed values |
 
 ---
 
@@ -55,7 +55,7 @@ What if we correlate something like `[0, 1]` with missing partners — one side 
 - **OPTIONAL tests:** allow missing values in, call `stat:pearson` / `covariance` / `percentile` / `p` / etc.
 - **Assert:** usually one result row with the answer variable **unbound** (empty).
 - **REQUIRED tests:** both properties required → incompletes disappear; known numbers (e.g. perfect line → pearson `1.0`).
-- **`EDGE_*`:** same idea on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
+- **Natural fixtures:** same idea on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
 
 ### What we learned
 
@@ -76,7 +76,7 @@ Incomplete pair case (alice+bob, OPTIONAL english): **empty correlation**, not a
 
 Almost no data — too few points or no spread for correlation.
 
-### Dataset: [`edge_tiny`](custom-data/edge_tiny.md)
+### Dataset: [`tiny`](custom-data/tiny.md)
 
 | Case | Meaning |
 |------|---------|
@@ -100,7 +100,7 @@ Almost no data — too few points or no spread for correlation.
 
 ## Agenda #3 — Richer queries
 
-### Dataset: [`edge_groups`](custom-data/edge_groups.md)
+### Dataset: [`groups`](custom-data/groups.md)
 
 | Group | Content |
 |-------|---------|
@@ -119,7 +119,7 @@ Almost no data — too few points or no spread for correlation.
 
 ## Agenda #4 — Dirty / weird values
 
-### Dataset: [`edge_dirty`](custom-data/edge_dirty.md)
+### Dataset: [`dirty`](custom-data/dirty.md)
 
 | Test idea | Result |
 |-----------|--------|

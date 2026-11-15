@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="340" viewBox="0 0 720 340" role="img" aria-label="Main bivariate pair — complete vs missing partner">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="360.0" y="28" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="600" fill="#1a1a1a">Main bivariate pair — complete vs missing partner</text>
+<rect x="510" y="12" width="12" height="12" fill="#2F6FED"/><text x="526" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">both present</text>
+<rect x="620" y="12" width="12" height="12" fill="#C45C26"/><text x="636" y="22" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">left only</text>
+<line x1="56" y1="252" x2="696" y2="252" stroke="#ccc"/>
+<rect x="66.0" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="66.0" y="121.33732774116237" width="68.75" height="130.66267225883763" fill="#2F6FED" rx="2"/>
+<text x="100.375" y="115.33732774116237" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="100.375" y="266" text-anchor="end" transform="rotate(-35 100.375 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">earthquakes</text>
+<rect x="144.75" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="144.75" y="53.98921509886159" width="68.75" height="198.0107849011384" fill="#2F6FED" rx="2"/>
+<text x="179.125" y="47.98921509886159" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="179.125" y="266" text-anchor="end" transform="rotate(-35 179.125 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">films</text>
+<rect x="223.5" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="223.5" y="48.0" width="68.75" height="204.0" fill="#2F6FED" rx="2"/>
+<text x="257.875" y="42.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="257.875" y="266" text-anchor="end" transform="rotate(-35 257.875 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">mountains</text>
+<rect x="302.25" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="302.25" y="235.86578789694428" width="68.75" height="16.134212103055724" fill="#2F6FED" rx="2"/>
+<text x="336.625" y="229.86578789694428" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="336.625" y="266" text-anchor="end" transform="rotate(-35 336.625 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">countries</text>
+<rect x="381.0" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="381.0" y="132.33792690233673" width="68.75" height="119.66207309766327" fill="#2F6FED" rx="2"/>
+<text x="415.375" y="126.33792690233673" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="415.375" y="266" text-anchor="end" transform="rotate(-35 415.375 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">airports</text>
+<rect x="459.75" y="252.0" width="68.75" height="0.0" fill="#C45C26" rx="2"/>
+<rect x="459.75" y="100.92510485320551" width="68.75" height="151.0748951467945" fill="#2F6FED" rx="2"/>
+<text x="494.125" y="94.92510485320551" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">100%</text>
+<text x="494.125" y="266" text-anchor="end" transform="rotate(-35 494.125 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">universities</text>
+<rect x="538.5" y="229.63211503894547" width="68.75" height="22.367884961054525" fill="#C45C26" rx="2"/>
+<rect x="538.5" y="126.59316956261233" width="68.75" height="103.03894547633314" fill="#2F6FED" rx="2"/>
+<text x="572.875" y="120.59316956261233" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">82%</text>
+<text x="572.875" y="266" text-anchor="end" transform="rotate(-35 572.875 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">cities</text>
+<rect x="617.25" y="239.4104254044338" width="68.75" height="12.589574595566207" fill="#C45C26" rx="2"/>
+<rect x="617.25" y="232.07669263031755" width="68.75" height="7.333732774116237" fill="#2F6FED" rx="2"/>
+<text x="651.625" y="226.07669263031755" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">37%</text>
+<text x="651.625" y="266" text-anchor="end" transform="rotate(-35 651.625 266)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#333">cars</text>
+</svg>

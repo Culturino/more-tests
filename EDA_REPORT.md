@@ -7,6 +7,7 @@ Exploratory overview of every Turtle fixture used by this repository’s tests.
 | **Natural fixtures** | [`src/test/resources/*.ttl`](src/test/resources/) |
 | **Handmade edge fixtures** | TTL: [`src/test/resources/custom-data/`](src/test/resources/custom-data/) · tables: [`custom-data/`](custom-data/) |
 | **Method** | Static scan of Turtle subjects / properties / numeric literals (not a SPARQL run) |
+| **Charts** | SVG under [`docs/eda-charts/`](docs/eda-charts/) (render on GitHub + most Markdown previews) |
 | **Related** | [README.md](README.md) · [EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md) |
 
 Numbers below are approximate counts from the files as checked into the repo. They describe **what is in the graph**, not what a particular query returns after joins/`OPTIONAL`.
@@ -26,11 +27,17 @@ Numbers below are approximate counts from the files as checked into the repo. Th
 | [`airports.ttl`](src/test/resources/airports.ttl) | 979 | `dbo:Airport` | Natural / happy-path |
 | [`universities.ttl`](src/test/resources/universities.ttl) | 1 236 | `dbo:University` | Natural / happy-path |
 | [`GFG_example.ttl`](src/test/resources/GFG_example.ttl) | 120 | `ex:Person` | Tiny complete chi-squared demo |
-| [`edge_pairs`](custom-data/edge_pairs.md) | 12 | `ex:Student` | Edge #1 incomplete pairs |
-| [`edge_chi`](custom-data/edge_chi.md) | 7 | `ex:Person` | Edge #1 chi_sq gaps |
-| [`edge_tiny`](custom-data/edge_tiny.md) | 12 | `ex:Point` | Edge #2 tiny / empty |
-| [`edge_groups`](custom-data/edge_groups.md) | 9 | `ex:Student` | Edge #3 GROUP BY |
-| [`edge_dirty`](custom-data/edge_dirty.md) | 15 | `ex:Item` | Edge #4 dirty types |
+| [`pairs`](custom-data/pairs.md) | 12 | `ex:Student` | Edge #1 incomplete pairs |
+| [`chi`](custom-data/chi.md) | 7 | `ex:Person` | Edge #1 chi_sq gaps |
+| [`tiny`](custom-data/tiny.md) | 12 | `ex:Point` | Edge #2 tiny / empty |
+| [`groups`](custom-data/groups.md) | 9 | `ex:Student` | Edge #3 GROUP BY |
+| [`dirty`](custom-data/dirty.md) | 15 | `ex:Item` | Edge #4 dirty types |
+
+### Charts — size of each fixture
+
+![Natural datasets subject counts](docs/eda-charts/subjects-natural.svg)
+
+![Handmade edge fixture subject counts](docs/eda-charts/edge-subjects.svg)
 
 ---
 
@@ -111,7 +118,7 @@ Some DBpedia-scraped values are nonsense for physics (negative lengths, magnitud
 - Extremely wide / negative lengths and wheelbases → unit mix + scrape errors.
 - Tiny absurd weights (e.g. 2.2) look like unit or placeholder junk.
 
-**Used by:** happy-path pearson/covariance/percentile; many `EDGE_cars*` methods in `*EdgeTest` classes.
+**Used by:** happy-path pearson/covariance/percentile; many `carsOptional*` methods in `*EdgeTest` classes.
 
 ---
 
@@ -170,7 +177,7 @@ Some DBpedia-scraped values are nonsense for physics (negative lengths, magnitud
 - Population heavily skewed (median ~4k vs mean ~1.2e5).
 - Area in huge square-metre style magnitudes → covariance numbers look enormous.
 
-**Used by:** pearson/covariance/probability; `EDGE_cities*` OPTIONAL elevation tests.
+**Used by:** pearson/covariance/probability; `citiesOptional*` elevation tests.
 
 ---
 
@@ -266,7 +273,7 @@ Some DBpedia-scraped values are nonsense for physics (negative lengths, magnitud
 **EDA notes**
 
 - Fully complete categorical data — no missingness.
-- Contrast with handmade [`edge_chi`](custom-data/edge_chi.md), which deliberately adds incomplete persons.
+- Contrast with handmade [`chi`](custom-data/chi.md), which deliberately adds incomplete persons.
 
 ---
 
@@ -274,7 +281,7 @@ Some DBpedia-scraped values are nonsense for physics (negative lengths, magnitud
 
 Full row tables: [`custom-data/`](custom-data/). Summary only here.
 
-### 4.1 [`edge_pairs`](custom-data/edge_pairs.md) — incomplete pairs
+### 4.1 [`pairs`](custom-data/pairs.md) — incomplete pairs
 
 | | math | english |
 |--|------|---------|
@@ -284,7 +291,7 @@ Full row tables: [`custom-data/`](custom-data/). Summary only here.
 
 Designed so REQUIRED join ≠ OPTIONAL behavior. Perfect-line subset (cara…finn) gives pearson 1.0.
 
-### 4.2 [`edge_chi`](custom-data/edge_chi.md) — categorical gaps
+### 4.2 [`chi`](custom-data/chi.md) — categorical gaps
 
 | Complete (gender+order) | Incomplete |
 |-------------------------|------------|
@@ -292,12 +299,12 @@ Designed so REQUIRED join ≠ OPTIONAL behavior. Perfect-line subset (cara…fin
 
 Shows `chi_sq` still returning a number under `OPTIONAL` (unlike pearson).
 
-### 4.3 [`edge_tiny`](custom-data/edge_tiny.md) — degenerate sizes
+### 4.3 [`tiny`](custom-data/tiny.md) — degenerate sizes
 
 Cases: `empty`, `single`, `identical`, `constantX`, `two`.  
 Documents NaN / 0.0 / NPE behaviors for tiny inputs.
 
-### 4.4 [`edge_groups`](custom-data/edge_groups.md) — grouping
+### 4.4 [`groups`](custom-data/groups.md) — grouping
 
 | Group | Complete pairs | Intent |
 |-------|----------------|--------|
@@ -306,7 +313,7 @@ Documents NaN / 0.0 / NPE behaviors for tiny inputs.
 | C | 2 identical | No variance |
 | D | 0 | Absent under REQUIRED |
 
-### 4.5 [`edge_dirty`](custom-data/edge_dirty.md) — type junk
+### 4.5 [`dirty`](custom-data/dirty.md) — type junk
 
 Cases cover clean numerics, string-as-number, mixed poison rows, all-true/false flags, multi-valued properties, empty conditional probability.
 
@@ -315,6 +322,10 @@ Cases cover clean numerics, string-as-number, mixed poison rows, all-true/false 
 ## 5. Cross-dataset comparison
 
 ### 5.1 Missingness for the “main” bivariate pair
+
+![Pair completeness percent](docs/eda-charts/pair-completeness-pct.svg)
+
+![Pair completeness stacked counts](docs/eda-charts/pair-completeness.svg)
 
 | Dataset | Pair | Complete % | Best for |
 |---------|------|------------|----------|
@@ -326,6 +337,14 @@ Cases cover clean numerics, string-as-number, mixed poison rows, all-true/false 
 | universities | students × endowment | 100% | Heavy skew |
 | **cities** | population × elevation | **82%** | Natural missing elevation |
 | **cars** | length × weight | **37%** | Natural missing weight |
+
+### Charts — where incompleteness lives
+
+![cars length × weight](docs/eda-charts/cars-length-weight.svg)
+
+![cities population × elevation](docs/eda-charts/cities-pop-elev.svg)
+
+![films runtime present vs missing](docs/eda-charts/films-runtime.svg)
 
 ### 5.2 Data-quality themes
 

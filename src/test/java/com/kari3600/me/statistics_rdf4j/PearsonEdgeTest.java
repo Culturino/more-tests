@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Edge cases for {@code stat:pearson}.
- * Fixtures: custom-data/edge_pairs, edge_tiny, edge_groups, edge_dirty; cars/cities.
+ * Fixtures: custom-data/pairs, tiny, groups, dirty; cars/cities.
  */
 public class PearsonEdgeTest {
 
@@ -29,8 +29,8 @@ public class PearsonEdgeTest {
             PREFIX dbp: <http://dbpedia.org/property/>
             """;
 
-    private static void assertTinyPearsonNaN(String caseName) {
-        double d = query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
+    private static void assertTinyPearson(String caseName) {
+        double d = query1Group1Var("custom-data/tiny.ttl", PREFIX + """
                 SELECT (stat:pearson(?x, ?y) AS ?corr)
                 WHERE {
                     ?s ex:case "%s" ;
@@ -41,33 +41,11 @@ public class PearsonEdgeTest {
         assertTrue(Double.isNaN(d), caseName + " pearson expected NaN, got " + d);
     }
 
-    @Test
-    public void optionalAllYMissing_pearson() {
-        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
-                SELECT (stat:pearson(?math, ?english) AS ?corr)
-                WHERE {
-                    VALUES ?student { ex:alice ex:bob }
-                    ?student ex:math ?math .
-                    OPTIONAL { ?student ex:english ?english }
-                }
-                """, "corr");
-    }
-
-    @Test
-    public void optionalMixed_pearsonPoisonsOnUnbound() {
-        assertUnboundAggregate("custom-data/edge_pairs.ttl", PREFIX + """
-                SELECT (stat:pearson(?math, ?english) AS ?corr)
-                WHERE {
-                    ?student a ex:Student ;
-                        ex:math ?math .
-                    OPTIONAL { ?student ex:english ?english }
-                }
-                """, "corr");
-    }
+    // --- pairs: healthy controls ---
 
     @Test
     public void requiredPerfectLine_pearson() {
-        assertEquals(1.0, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
+        assertEquals(1.0, query1Group1Var("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     VALUES ?student { ex:cara ex:dan ex:ella ex:finn }
@@ -79,7 +57,7 @@ public class PearsonEdgeTest {
 
     @Test
     public void requiredAllComplete_pearson() {
-        assertEquals(0.45191786568701003, query1Group1Var("custom-data/edge_pairs.ttl", PREFIX + """
+        assertEquals(0.45191786568701003, query1Group1Var("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     ?student a ex:Student ;
@@ -89,9 +67,35 @@ public class PearsonEdgeTest {
                 """, "corr").doubleValue(), 1e-6);
     }
 
+    // --- pairs: edge cases ---
+
     @Test
-    public void requiredIncompleteOnly_emptyAggregate() {
-        List<BindingSet> rows = queryAll("custom-data/edge_pairs.ttl", PREFIX + """
+    public void optionalAllYMissing_pearson() {
+        assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
+                SELECT (stat:pearson(?math, ?english) AS ?corr)
+                WHERE {
+                    VALUES ?student { ex:alice ex:bob }
+                    ?student ex:math ?math .
+                    OPTIONAL { ?student ex:english ?english }
+                }
+                """, "corr");
+    }
+
+    @Test
+    public void optionalMixed_pearson() {
+        assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
+                SELECT (stat:pearson(?math, ?english) AS ?corr)
+                WHERE {
+                    ?student a ex:Student ;
+                        ex:math ?math .
+                    OPTIONAL { ?student ex:english ?english }
+                }
+                """, "corr");
+    }
+
+    @Test
+    public void requiredIncompleteOnly_pearson() {
+        List<BindingSet> rows = queryAll("custom-data/pairs.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     VALUES ?student { ex:alice ex:bob }
@@ -111,8 +115,10 @@ public class PearsonEdgeTest {
         }
     }
 
+    // --- cars / cities ---
+
     @Test
-    public void EDGE_carsOptionalMissingWeight_pearson() {
+    public void carsOptionalMissingWeight_pearson() {
         assertUnboundAggregate("cars.ttl", DBPEDIA + """
                 SELECT (stat:pearson(?length, ?weight) AS ?corr)
                 WHERE {
@@ -124,7 +130,7 @@ public class PearsonEdgeTest {
     }
 
     @Test
-    public void EDGE_citiesOptionalMissingElevation_pearson() {
+    public void citiesOptionalMissingElevation_pearson() {
         assertUnboundAggregate("cities.ttl", DBPEDIA + """
                 SELECT (stat:pearson(?population, ?elevation) AS ?corr)
                 WHERE {
@@ -135,29 +141,11 @@ public class PearsonEdgeTest {
                 """, "corr");
     }
 
-    @Test
-    public void tinyEmpty_pearsonNaN() {
-        assertTinyPearsonNaN("empty");
-    }
+    // --- tiny: healthy control then edges ---
 
     @Test
-    public void tinySingle_pearsonNaN() {
-        assertTinyPearsonNaN("single");
-    }
-
-    @Test
-    public void tinyIdentical_pearsonNaN() {
-        assertTinyPearsonNaN("identical");
-    }
-
-    @Test
-    public void tinyConstantX_pearsonNaN() {
-        assertTinyPearsonNaN("constantX");
-    }
-
-    @Test
-    public void tinyTwo_pearsonOne() {
-        assertEquals(1.0, query1Group1Var("custom-data/edge_tiny.ttl", PREFIX + """
+    public void tinyTwo_pearson() {
+        assertEquals(1.0, query1Group1Var("custom-data/tiny.ttl", PREFIX + """
                 SELECT (stat:pearson(?x, ?y) AS ?corr)
                 WHERE {
                     ?s ex:case "two" ; ex:x ?x ; ex:y ?y .
@@ -166,8 +154,49 @@ public class PearsonEdgeTest {
     }
 
     @Test
-    public void richerGroupBy_pearsonPerGroup() {
-        List<BindingSet> rows = queryAll("custom-data/edge_groups.ttl", PREFIX + """
+    public void tinyEmpty_pearson() {
+        assertTinyPearson("empty");
+    }
+
+    @Test
+    public void tinySingle_pearson() {
+        assertTinyPearson("single");
+    }
+
+    @Test
+    public void tinyIdentical_pearson() {
+        assertTinyPearson("identical");
+    }
+
+    @Test
+    public void tinyConstantX_pearson() {
+        assertTinyPearson("constantX");
+    }
+
+    // --- groups: healthy control then edges ---
+
+    @Test
+    public void richerMultiAggregate_pearson() {
+        List<BindingSet> rows = queryAll("custom-data/groups.ttl", PREFIX + """
+                SELECT (stat:pearson(?math, ?english) AS ?corr)
+                       (stat:covariance(?math, ?english) AS ?cov)
+                       (COUNT(*) AS ?n)
+                WHERE {
+                    ?s ex:group "A" ;
+                       ex:math ?math ;
+                       ex:english ?english .
+                }
+                """);
+        assertEquals(1, rows.size());
+        BindingSet r = rows.get(0);
+        assertEquals(1.0, ((Literal) r.getValue("corr")).doubleValue(), 1e-9);
+        assertEquals(3.333333333333333, ((Literal) r.getValue("cov")).doubleValue(), 1e-9);
+        assertEquals(4, ((Literal) r.getValue("n")).intValue());
+    }
+
+    @Test
+    public void richerGroupBy_pearson() {
+        List<BindingSet> rows = queryAll("custom-data/groups.ttl", PREFIX + """
                 SELECT ?g (stat:pearson(?math, ?english) AS ?corr) (COUNT(*) AS ?n)
                 WHERE {
                     ?s ex:group ?g ;
@@ -196,8 +225,8 @@ public class PearsonEdgeTest {
     }
 
     @Test
-    public void richerFilterEmpties_pearsonNaN() {
-        double d = query1Group1Var("custom-data/edge_groups.ttl", PREFIX + """
+    public void richerFilterEmpties_pearson() {
+        double d = query1Group1Var("custom-data/groups.ttl", PREFIX + """
                 SELECT (stat:pearson(?math, ?english) AS ?corr)
                 WHERE {
                     ?s ex:group "A" ;
@@ -209,29 +238,11 @@ public class PearsonEdgeTest {
         assertTrue(Double.isNaN(d), "expected NaN when FILTER removes all rows, got " + d);
     }
 
-    /** Multi-aggregate SELECT also exercises covariance alongside pearson. */
-    @Test
-    public void richerMultiAggregate_pearsonCovCount() {
-        List<BindingSet> rows = queryAll("custom-data/edge_groups.ttl", PREFIX + """
-                SELECT (stat:pearson(?math, ?english) AS ?corr)
-                       (stat:covariance(?math, ?english) AS ?cov)
-                       (COUNT(*) AS ?n)
-                WHERE {
-                    ?s ex:group "A" ;
-                       ex:math ?math ;
-                       ex:english ?english .
-                }
-                """);
-        assertEquals(1, rows.size());
-        BindingSet r = rows.get(0);
-        assertEquals(1.0, ((Literal) r.getValue("corr")).doubleValue(), 1e-9);
-        assertEquals(3.333333333333333, ((Literal) r.getValue("cov")).doubleValue(), 1e-9);
-        assertEquals(4, ((Literal) r.getValue("n")).intValue());
-    }
+    // --- dirty ---
 
     @Test
-    public void dirtyMixedNonNumeric_pearsonUnbound() {
-        assertUnboundAggregate("custom-data/edge_dirty.ttl", PREFIX + """
+    public void dirtyMixedNonNumeric_pearson() {
+        assertUnboundAggregate("custom-data/dirty.ttl", PREFIX + """
                 SELECT (stat:pearson(?val, ?other) AS ?corr)
                 WHERE {
                     ?s ex:case "mixed" ; ex:val ?val ; ex:other ?other .

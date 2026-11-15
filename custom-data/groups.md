@@ -1,8 +1,8 @@
-# edge_groups
+# groups
 
 Agenda **#3** — `GROUP BY` slices (healthy / sparse / identical / incomplete).
 
-Source TTL: [`src/test/resources/custom-data/edge_groups.ttl`](../src/test/resources/custom-data/edge_groups.ttl)
+Source TTL: [`src/test/resources/custom-data/groups.ttl`](../src/test/resources/custom-data/groups.ttl)
 
 | id | group | math | english | note |
 |----|-------|------|---------|------|
