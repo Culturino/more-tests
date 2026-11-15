@@ -10,7 +10,10 @@
 | **Build** | Maven |
 | **RDF4J (this checkout)** | `6.2.0-M2` (local/runnable) |
 
-For a deep dive into edge-case findings, see **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)**.
+Further docs:
+
+- **[EDA_REPORT.md](EDA_REPORT.md)** — exploratory analysis of every fixture (completeness, ranges, missingness)
+- **[EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md)** — edge-case agendas #1–#4 findings
 
 Handmade edge fixtures: **TTL sources** in [`src/test/resources/custom-data/`](src/test/resources/custom-data/), **table views** in [`custom-data/`](custom-data/) (see [§7.1](#71-custom-data-handmade-edge-fixtures)).
 
@@ -128,6 +131,7 @@ Factories are registered via Java SPI under:
 ```text
 more-tests/
 ├── README.md
+├── EDA_REPORT.md             ← exploratory analysis of all fixtures
 ├── EDGE_CASE_REPORT.md
 ├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
 ├── pom.xml
@@ -142,7 +146,7 @@ more-tests/
     │   └── … shared aggregate plumbing …
     ├── main/resources/META-INF/services/
     └── test/
-        ├── java/.../EdgeCaseTest.java, PearsonTest.java, …
+        ├── java/.../PearsonTest.java, PearsonEdgeTest.java, …
         └── resources/
             ├── *.ttl                    ← natural DBpedia-style fixtures
             └── custom-data/*.ttl        ← handmade edge TTL sources
@@ -210,7 +214,7 @@ Under [`src/test/resources/`](src/test/resources/), used by happy-path tests:
 | [`universities.ttl`](src/test/resources/universities.ttl) | Universities | students, endowment |
 | [`GFG_example.ttl`](src/test/resources/GFG_example.ttl) | Tiny chi-squared demo | gender × ice-cream order |
 
-These graphs are **imperfect on purpose**. Happy-path queries usually **require** both variables, so incompletes are silently dropped. [`EdgeCaseTest`](src/test/java/com/kari3600/me/statistics_rdf4j/EdgeCaseTest.java) also reuses [`cars.ttl`](src/test/resources/cars.ttl) and [`cities.ttl`](src/test/resources/cities.ttl) via `EDGE_*` methods with `OPTIONAL`.
+These graphs are **imperfect on purpose**. Happy-path queries usually **require** both variables, so incompletes are silently dropped. Edge tests also reuse [`cars.ttl`](src/test/resources/cars.ttl) and [`cities.ttl`](src/test/resources/cities.ttl) via `EDGE_*` methods with `OPTIONAL`.
 
 ---
 
@@ -223,13 +227,18 @@ These graphs are **imperfect on purpose**. Happy-path queries usually **require*
 | [`PercentileTest`](src/test/java/com/kari3600/me/statistics_rdf4j/PercentileTest.java) | Happy-path percentiles | 5 |
 | [`ProbabilityTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityTest.java) | Happy-path `p` / conditional `p` | 7 |
 | [`ChiSquaredTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredTest.java) | GFG example | 1 |
-| [`EdgeCaseTest`](src/test/java/com/kari3600/me/statistics_rdf4j/EdgeCaseTest.java) | Agendas #1–#4 + `EDGE_*` on cars/cities | 52 |
+| [`PearsonEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java) | Edge cases for `stat:pearson` | 16 |
+| [`CovarianceEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java) | Edge cases for `stat:covariance` | 12 |
+| [`PercentileEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java) | Edge cases for `percentile` / `approx_median` | 11 |
+| [`ProbabilityEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java) | Edge cases for `stat:p` | 10 |
+| [`ChiSquaredEdgeTest`](src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java) | Edge cases for `stat:chi_sq` | 3 |
 
-**Naming:** edge methods on natural data start with `EDGE_` (e.g. `EDGE_carsOptionalMissingWeight_pearson`).
+**Naming:** edge methods on natural data start with `EDGE_` (e.g. `EDGE_carsOptionalMissingWeight_pearson`). Edge classes are split **by function**, not by agenda.
 
 ```bash
 mvn test
-mvn test -Dtest=EdgeCaseTest
+mvn test -Dtest=PearsonEdgeTest
+mvn test "-Dtest=*EdgeTest"
 ```
 
 ---
@@ -297,8 +306,9 @@ Dataset: [`edge_dirty`](custom-data/edge_dirty.md).
 
 ```bash
 mvn test
-mvn test -Dtest=EdgeCaseTest
-mvn test -Dtest=EdgeCaseTest#optionalAllYMissing_pearson
+mvn test -Dtest=PearsonEdgeTest
+mvn test -Dtest=PearsonEdgeTest#optionalAllYMissing_pearson
+mvn test "-Dtest=*EdgeTest"
 ```
 
 ---
@@ -359,6 +369,7 @@ This checkout targets **published RDF4J `6.2.0-M2`**: n-ary factories use `getMi
 
 | Doc | Contents |
 |-----|----------|
+| [EDA_REPORT.md](EDA_REPORT.md) | Exploratory analysis of all datasets |
 | [EDGE_CASE_REPORT.md](EDGE_CASE_REPORT.md) | Full write-up of agendas #1–#4 |
 | [custom-data/](custom-data/) | Table views of handmade edge fixtures |
 | [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |

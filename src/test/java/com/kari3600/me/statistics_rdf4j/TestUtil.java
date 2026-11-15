@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 public class TestUtil {
     public static void query(String dataset, String queryString, Consumer<TupleQueryResult> resultConsumer) {
         Repository db = new SailRepository(new MemoryStore());
@@ -68,5 +72,13 @@ public class TestUtil {
             return null;
         }
         return rows.get(0).getValue(variable);
+    }
+
+    /** Assert a single result row whose aggregate variable is unbound (type-error / poison). */
+    public static void assertUnboundAggregate(String dataset, String queryString, String variable) {
+        List<BindingSet> rows = queryAll(dataset, queryString);
+        assertEquals(1, rows.size());
+        assertFalse(rows.get(0).hasBinding(variable));
+        assertNull(rows.get(0).getValue(variable));
     }
 }

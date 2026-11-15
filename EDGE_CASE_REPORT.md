@@ -8,8 +8,13 @@ All of this lives mainly in:
 
 - Table views: [`custom-data/`](custom-data/)
 - TTL sources: [`src/test/resources/custom-data/`](src/test/resources/custom-data/)
-- Tests: [`EdgeCaseTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/EdgeCaseTest.java)
-- Helpers: [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, unbound checks)
+- Tests (by function):
+  - [`PearsonEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java)
+  - [`CovarianceEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java)
+  - [`PercentileEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java)
+  - [`ProbabilityEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java)
+  - [`ChiSquaredEdgeTest.java`](src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java)
+- Helpers: [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, `assertUnboundAggregate`)
 
 Full suite: **green** locally (`mvn test`).
 
@@ -135,16 +140,17 @@ Almost no data — too few points or no spread for correlation.
 custom-data/*.md                      # table views (docs)
 src/test/resources/custom-data/*.ttl  # TTL sources (tests)
 
-src/test/java/.../EdgeCaseTest.java
-  optional* / required*     → #1 handmade
-  EDGE_*                    → #1 on natural + chi
-  tiny*                     → #2
-  richer*                   → #3
-  dirty*                    → #4
+src/test/java/.../*EdgeTest.java   (split by SPARQL function)
+  PearsonEdgeTest      → pearson (#1–#4 slices)
+  CovarianceEdgeTest   → covariance
+  PercentileEdgeTest   → percentile / approx_median
+  ProbabilityEdgeTest  → p / conditional p
+  ChiSquaredEdgeTest   → chi_sq
 
 src/test/java/.../TestUtil.java
-  query1Group1Var  → one number
-  queryAll         → multi-row / unbound checks
+  query1Group1Var       → one number
+  queryAll              → multi-row / unbound checks
+  assertUnboundAggregate → single unbound aggregate row
 ```
 
 `assertUnboundAggregate` means: run this query, expect exactly one row, and the named variable has **no value**.
