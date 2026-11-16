@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Earthquakes |
-| **Source file** | [`earthquakes.ttl`](../src/test/resources/earthquakes.ttl) |
+| **Source file** | [`earthquakes.ttl`](../../src/test/resources/earthquakes.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Earthquake` |
 | **Used by** | Happy-path pearson, covariance, percentile, probability |

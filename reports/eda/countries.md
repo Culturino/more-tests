@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Countries |
-| **Source file** | [`countries.ttl`](../src/test/resources/countries.ttl) |
+| **Source file** | [`countries.ttl`](../../src/test/resources/countries.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Country` |
 | **Used by** | Happy-path pearson / covariance |

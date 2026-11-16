@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Universities |
-| **Source file** | [`universities.ttl`](../src/test/resources/universities.ttl) |
+| **Source file** | [`universities.ttl`](../../src/test/resources/universities.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:University` |
 | **Used by** | Happy-path pearson / covariance |

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Airports |
-| **Source file** | [`airports.ttl`](../src/test/resources/airports.ttl) |
+| **Source file** | [`airports.ttl`](../../src/test/resources/airports.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Airport` |
 | **Used by** | Happy-path pearson / covariance / probability |

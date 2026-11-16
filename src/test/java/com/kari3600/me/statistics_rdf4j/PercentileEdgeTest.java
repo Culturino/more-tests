@@ -103,14 +103,14 @@ public class PercentileEdgeTest {
 
     @Test
     public void tinyEmpty_percentile() {
-        assertThrows(NullPointerException.class, () ->
-                query1Group1Var("custom-data/tiny.ttl", PREFIX + """
-                        SELECT (stat:approx_percentile(?x, 0.5) AS ?p)
-                        WHERE {
-                            VALUES ?s { ex:empty2 ex:empty3 }
-                            ?s ex:x ?x .
-                        }
-                        """, "p"));
+        // Kari 81550f1: empty input leaves percentile unset → unbound (was NPE)
+        assertUnboundAggregate("custom-data/tiny.ttl", PREFIX + """
+                SELECT (stat:approx_percentile(?x, 0.5) AS ?p)
+                WHERE {
+                    VALUES ?s { ex:empty2 ex:empty3 }
+                    ?s ex:x ?x .
+                }
+                """, "p");
     }
 
     // --- dirty: healthy control then edges ---

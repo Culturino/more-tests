@@ -17,10 +17,12 @@ There are two kinds of files:
 more-tests/
 ├── pom.xml                 ← shopping list for the build tool (Maven)
 ├── README.md               ← human guide
-├── testing2.md             ← “weird situations” write-up
+├── reports/                ← all analysis / edge reports
+│   ├── testing2.md         ← “weird situations” write-up
+│   ├── edge-suite-report.md
+│   ├── post analysis/      ← this walkthrough (you are here)
+│   └── eda/                ← per-dataset EDA write-ups
 ├── custom-data/            ← tables so humans can read small fake datasets
-├── post analysis/          ← this walkthrough (you are here)
-├── eda/                    ← per-dataset EDA write-ups
 └── src/
     ├── main/               ← the calculator (Java)
     └── test/               ← exams + answer sheets
@@ -34,8 +36,8 @@ Ignore `target/` — leftovers from running tests.
 |------|------|
 | `pom.xml` | Maven config: Java 25, RDF4J, JUnit, math libs. Recipe so `mvn test` works. |
 | `README.md` | Tour guide. Doesn’t run anything. |
-| `testing2.md` | Diary of weird cases (missing scores, tiny groups, garbage types). |
-| `eda/` | Per-dataset EDA (counts, completeness, value kinds). |
+| `reports/testing2.md` | Diary of weird cases (missing scores, tiny groups, garbage types). |
+| `reports/eda/` | Per-dataset EDA (counts, completeness, value kinds). |
 
 ## `custom-data/` (human tables)
 

@@ -7,13 +7,13 @@ Status of the SPARQL statistics edge suite in this repo (RDF4J aggregates: pears
 | Piece | Where |
 |-------|--------|
 | Findings (this doc) | [`testing2.md`](testing2.md) |
-| Project overview | [`README.md`](README.md) |
+| Project overview | [`README.md`](../README.md) |
 | Per-dataset EDA | [`eda/`](eda/) |
 | Line-by-line walkthrough | [`post analysis/`](post%20analysis/) |
-| Fixture table views | [`custom-data/`](custom-data/) |
-| Fixture TTL (what tests load) | [`src/test/resources/custom-data/`](src/test/resources/custom-data/) |
-| Edge tests (by function) | `*EdgeTest.java` under [`src/test/java/.../statistics_rdf4j/`](src/test/java/com/kari3600/me/statistics_rdf4j/) |
-| Shared helpers | [`TestUtil.java`](src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, `assertUnboundAggregate`) |
+| Fixture table views | [`custom-data/`](../custom-data/) |
+| Fixture TTL (what tests load) | [`src/test/resources/custom-data/`](../src/test/resources/custom-data/) |
+| Edge tests (by function) | `*EdgeTest.java` under [`src/test/java/.../statistics_rdf4j/`](../src/test/java/com/kari3600/me/statistics_rdf4j/) |
+| Shared helpers | [`TestUtil.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) (`queryAll`, `assertUnboundAggregate`) |
 
 **How the suite is organized now**
 
@@ -38,11 +38,11 @@ SPARQL/RDF has no JSON-style `null`. “Missing” shows up as:
 
 | File | Agenda | Role |
 |------|--------|------|
-| [`pairs`](custom-data/pairs.md) | #1 | Students with `math` / `english`; some missing one or both |
-| [`chi`](custom-data/chi.md) | #1 | Tiny gender×order table with incomplete people |
-| [`tiny`](custom-data/tiny.md) | #2 | Degenerate sizes via `ex:case` |
-| [`groups`](custom-data/groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
-| [`dirty`](custom-data/dirty.md) | #4 | Dirty / weird typed values |
+| [`pairs`](../custom-data/pairs.md) | #1 | Students with `math` / `english`; some missing one or both |
+| [`chi`](../custom-data/chi.md) | #1 | Tiny gender×order table with incomplete people |
+| [`tiny`](../custom-data/tiny.md) | #2 | Degenerate sizes via `ex:case` |
+| [`groups`](../custom-data/groups.md) | #3 | Groups for `GROUP BY` / FILTER / multi-agg |
+| [`dirty`](../custom-data/dirty.md) | #4 | Dirty / weird typed values |
 
 EDA for these (and the natural DBpedia-style fixtures) lives under [`eda/`](eda/).
 
@@ -59,7 +59,7 @@ What if we correlate something like `[0, 1]` with missing partners — one side 
 - **OPTIONAL tests:** allow missing values in, call `stat:pearson` / `covariance` / `percentile` / `p` / etc.
 - **Assert:** usually one result row with the answer variable **unbound** (empty) via `assertUnboundAggregate`.
 - **REQUIRED tests:** both properties required → incompletes disappear; known numbers (e.g. perfect line → pearson `1.0`).
-- **Natural fixtures:** same idea on [`cars.ttl`](src/test/resources/cars.ttl) / [`cities.ttl`](src/test/resources/cities.ttl).
+- **Natural fixtures:** same idea on [`cars.ttl`](../src/test/resources/cars.ttl) / [`cities.ttl`](../src/test/resources/cities.ttl).
 
 ### What we learned
 
@@ -80,7 +80,7 @@ Incomplete pair case (alice+bob, OPTIONAL english): **empty correlation**, not a
 
 Almost no data — too few points or no spread for correlation.
 
-### Dataset: [`tiny`](custom-data/tiny.md)
+### Dataset: [`tiny`](../custom-data/tiny.md)
 
 | Case | Meaning |
 |------|---------|
@@ -96,7 +96,7 @@ Almost no data — too few points or no spread for correlation.
 |-----------------|--------|
 | pearson on empty / single / identical / constantX | **NaN** |
 | covariance on those | **0.0** |
-| percentile with zero inputs | **NullPointerException** |
+| percentile with zero inputs | **Unbound** (Kari `81550f1`) |
 | probability with zero rows | **NaN** (0/0) |
 | `two` (two good points) | pearson **1**, covariance **1** |
 
@@ -104,7 +104,7 @@ Almost no data — too few points or no spread for correlation.
 
 ## Agenda #3 — Richer queries
 
-### Dataset: [`groups`](custom-data/groups.md)
+### Dataset: [`groups`](../custom-data/groups.md)
 
 | Group | Content |
 |-------|---------|
@@ -125,7 +125,7 @@ Covered mainly in `PearsonEdgeTest` (`richerGroupBy_pearson`, `richerFilterEmpti
 
 ## Agenda #4 — Dirty / weird values
 
-### Dataset: [`dirty`](custom-data/dirty.md)
+### Dataset: [`dirty`](../custom-data/dirty.md)
 
 | Test idea | Result |
 |-----------|--------|
@@ -166,7 +166,7 @@ TestUtil.java
 ## Big takeaways
 
 1. **Missing values via `OPTIONAL`:** most stats → **unbound**; one bad row can poison the group; **chi_sq** still returns a number.
-2. **Tiny data:** pearson → **NaN**; covariance often → **0**; empty percentile can **NPE**.
+2. **Tiny data:** pearson → **NaN**; covariance often → **0**; empty percentile → **unbound**.
 3. **Richer SPARQL works:** `GROUP BY`, empty `FILTER`, multi-aggregate selects are covered.
 4. **Dirty types:** unbound or throw for bad numerics; raw `xsd:boolean` in `p()` works; percentile arg must be in `[0,1]`.
 
@@ -186,5 +186,5 @@ Happy-path clones on DBpedia-style data remain; these edge tests add the interes
 
 | Still open | Notes |
 |------------|--------|
-| Changing library behavior | Tests **document** current NaN / NPE / unbound policies; they do not fix them |
+| Changing library behavior | Tests **document** current NaN / unbound / throw policies; product fixes come from Kari |
 | Happy-path / `src/main` deep dive | Optional; not part of this edge report |

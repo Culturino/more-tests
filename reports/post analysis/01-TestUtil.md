@@ -1,6 +1,6 @@
 # 1 — `TestUtil.java` (the remote control)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java)
 
 All edge tests do the same dance. `TestUtil` is the shared remote control for that dance.
 

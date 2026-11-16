@@ -12,7 +12,7 @@
 
 - OPTIONAL / type-error → unbound matches normal SPARQL behavior.
 - Degenerate pearson → NaN is fine stats behavior.
-- **Clear bugs (1):** empty percentile **NPE**. (Raw `xsd:boolean` in `stat:p` fixed upstream `8d15da0`.)
+- **No open crash bugs** in the edge suite. Empty percentile NPE fixed upstream `81550f1`; raw `xsd:boolean` in `stat:p` fixed `8d15da0`.
 - Several other cases are **debatable design**, not crashes.
 
 ---
@@ -42,7 +42,7 @@
 | `chi_sq` + OPTIONAL missing | Still a number (null as category) | Debatable / inconsistent |
 | Degenerate pearson | NaN | Expected (stats) |
 | Degenerate / empty covariance | 0.0 (incl. empty & n=1) | OK for identical; empty/n=1 weak |
-| Empty percentile | NullPointerException | **Bug** |
+| Empty percentile | **Unbound** (Kari `81550f1`) | Fixed upstream |
 | Empty probability | NaN (0/0) | Debatable |
 | `stat:p(raw xsd:boolean)` | **1.0** on all-true (Kari `8d15da0` fix) | Fixed upstream |
 | Percentile rank 1.5 | Throws (hard crash) | Debatable (prefer unbound) |
@@ -55,7 +55,7 @@
 REQUIRED joins drop incompletes. OPTIONAL feeds unbound into the aggregate → most stats return unbound (poison). **`chi_sq` is the odd one out:** missing values become contingency levels and a number still comes back.
 
 ### #2 Tiny / empty groups
-Pearson → NaN when variance/n is insufficient. Covariance → 0 on degenerate Commons-Math paths. Empty `p` → NaN. **Empty percentile never sets the rank Double → NPE in `getQuantile`.**
+Pearson → NaN when variance/n is insufficient. Covariance → 0 on degenerate Commons-Math paths. Empty `p` → NaN. Empty percentile → **unbound** (Kari `81550f1`; was NPE).
 
 ### #3 Richer queries
 GROUP BY, empty FILTER, and multi-aggregate SELECT behave as coded: healthy group A → 1.0; B/C → NaN; D absent under REQUIRED. Covered mainly in `PearsonEdgeTest`.
@@ -69,7 +69,7 @@ Strings in numeric paths → unbound. Raw `xsd:boolean` in `stat:p(?flag)` works
 
 | Priority | Item | Why |
 |----------|------|-----|
-| **P0** | Empty percentile NPE | Should be unbound / clean type error, not crash |
+| ~~**P0**~~ | ~~Empty percentile NPE~~ | **Done** in Kari `81550f1` — unbound when no inputs |
 | ~~**P0**~~ | ~~Accept `xsd:boolean` in `asBoolean` / `p()`~~ | **Done** in Kari `8d15da0` — pulled into this fork |
 | **P1** | Empty / n=1 covariance → NaN or unbound | `0.0` looks like a real answer for undefined cov |
 | **P1** | Empty `p` / bad percentile rank → unbound | Align with SPARQL error → unbound policy |

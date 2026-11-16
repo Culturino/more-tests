@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Name** | Chi |
-| **Source file** | [`chi.ttl`](../src/test/resources/custom-data/chi.ttl) |
-| **Table view** | [`custom-data/chi.md`](../custom-data/chi.md) |
+| **Source file** | [`chi.ttl`](../../src/test/resources/custom-data/chi.ttl) |
+| **Table view** | [`custom-data/chi.md`](../../custom-data/chi.md) |
 | **Type** | Handmade edge fixture |
 | **Primary class** | `ex:Person` |
 | **Used by** | ChiSquaredEdgeTest |

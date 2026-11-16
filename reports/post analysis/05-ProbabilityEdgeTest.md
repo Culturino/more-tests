@@ -1,6 +1,6 @@
 # 5 — `ProbabilityEdgeTest.java` (full walkthrough)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java)
 
 > Test method names match the Java `@Test` methods (result words stripped from both).
 
@@ -23,7 +23,7 @@ Same `PREFIX` / `DBPEDIA` as the other edge classes.
 
 ## Block — OPTIONAL blanks
 
-**Datasets:** [`cars.ttl`](../src/test/resources/cars.ttl), [`cities.ttl`](../src/test/resources/cities.ttl), [`pairs`](../custom-data/pairs.md)
+**Datasets:** [`cars.ttl`](../../src/test/resources/cars.ttl), [`cities.ttl`](../../src/test/resources/cities.ttl), [`pairs`](../../custom-data/pairs.md)
 
 Blank variables from `OPTIONAL` → `?prob` unbound.
 
@@ -55,7 +55,7 @@ Blank variables from `OPTIONAL` → `?prob` unbound.
 
 ## Block — empty input (`tiny`)
 
-**Dataset:** [`tiny`](../custom-data/tiny.md)
+**Dataset:** [`tiny`](../../custom-data/tiny.md)
 
 ### `tinyEmpty_probability`
 
@@ -73,7 +73,7 @@ No `ex:x` → zero rows into `p` → matches/total = 0/0.
 
 ## Block — dirty flags & clean baseline (`dirty`)
 
-**Dataset:** [`dirty`](../custom-data/dirty.md)
+**Dataset:** [`dirty`](../../custom-data/dirty.md)
 
 ### Healthy controls (first)
 
@@ -142,6 +142,6 @@ Conditional probability with an empty “given” set (like dividing by zero).
 | Problem | Pearson | Cov | Percentile | Probability |
 |---------|---------|-----|------------|-------------|
 | OPTIONAL blank | unbound | unbound | unbound | unbound |
-| Empty input | NaN | 0.0 | NPE | **NaN** |
+| Empty input | NaN | 0.0 | unbound | **NaN** |
 | Empty *condition* | — | — | — | **NaN** |
 | Raw xsd:boolean | — | — | — | **works** (Kari `8d15da0`) |

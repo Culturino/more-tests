@@ -1,6 +1,6 @@
 # 3 — `CovarianceEdgeTest.java` (full walkthrough)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java)
 
 > Test method names match the Java `@Test` methods (result words stripped from both).
 
@@ -36,7 +36,7 @@ For degenerate slices, sample covariance comes back as **0.0**, not NaN.
 
 ## Block — `pairs`
 
-**Dataset:** [`pairs`](../custom-data/pairs.md) (same students as pearson)
+**Dataset:** [`pairs`](../../custom-data/pairs.md) (same students as pearson)
 
 ### Healthy controls (first)
 
@@ -72,7 +72,7 @@ All students with math; english optional → one blank ruins the barrel.
 
 ## Block — cars / cities
 
-**Datasets:** [`cars.ttl`](../src/test/resources/cars.ttl), [`cities.ttl`](../src/test/resources/cities.ttl)
+**Datasets:** [`cars.ttl`](../../src/test/resources/cars.ttl), [`cities.ttl`](../../src/test/resources/cities.ttl)
 
 ### Healthy control (first)
 
@@ -100,7 +100,7 @@ Required population, optional elevation.
 
 ## Block — tiny (`tiny`)
 
-**Dataset:** [`tiny`](../custom-data/tiny.md)
+**Dataset:** [`tiny`](../../custom-data/tiny.md)
 
 | case | Role |
 |------|------|

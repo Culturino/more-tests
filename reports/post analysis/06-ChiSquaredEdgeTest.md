@@ -1,10 +1,10 @@
 # 6 — `ChiSquaredEdgeTest.java` (full walkthrough)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java)
 
 > Test method names match the Java `@Test` methods (result words stripped from both).
 
-**Dataset:** [`chi`](../custom-data/chi.md)
+**Dataset:** [`chi`](../../custom-data/chi.md)
 
 ## What `stat:chi_sq` is (kid version)
 

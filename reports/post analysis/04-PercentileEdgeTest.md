@@ -1,6 +1,6 @@
 # 4 — `PercentileEdgeTest.java` (full walkthrough)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java)
 
 > Test method names match the Java `@Test` methods (result words stripped from both).
 
@@ -24,7 +24,7 @@ Same `PREFIX` / `DBPEDIA` as the other edge classes.
 
 ## Block — OPTIONAL on natural + handmade data
 
-**Datasets:** [`cars.ttl`](../src/test/resources/cars.ttl), [`cities.ttl`](../src/test/resources/cities.ttl), [`pairs`](../custom-data/pairs.md)
+**Datasets:** [`cars.ttl`](../../src/test/resources/cars.ttl), [`cities.ttl`](../../src/test/resources/cities.ttl), [`pairs`](../../custom-data/pairs.md)
 
 Same poison rule as pearson: `OPTIONAL` blanks → answer cell blank.
 
@@ -62,7 +62,7 @@ Same with `approx_median`.
 
 ## Block — tiny groups (`tiny`)
 
-**Dataset:** [`tiny`](../custom-data/tiny.md)
+**Dataset:** [`tiny`](../../custom-data/tiny.md)
 
 | case | Role |
 |------|------|
@@ -89,15 +89,15 @@ Three copies of `5`.
 #### `tinyEmpty_percentile`
 
 `empty2` / `empty3` have no `ex:x` → zero numbers into the percentile.  
-`assertThrows(NullPointerException)` = test **passes** only if that crash happens.
+Kari `81550f1` returns unbound instead of NPE when the rank was never set.
 
-> **Result:** `NullPointerException` (not NaN / not 0)
+> **Result:** unbound
 
 ---
 
 ## Block — dirty (`dirty`)
 
-**Dataset:** [`dirty`](../custom-data/dirty.md)
+**Dataset:** [`dirty`](../../custom-data/dirty.md)
 
 ### Healthy control (first)
 
@@ -132,7 +132,7 @@ assertThrows(RuntimeException.class, ...)
 |-------|--------------|
 | OPTIONAL poison | unbound |
 | Tiny single / identical | `3.0` / `5.0` |
-| Empty input | NPE |
+| Empty input | unbound |
 | Dirty multi-value | `2.0` |
 | Dirty string | unbound |
 | Rank outside 0..1 | throws |
@@ -142,7 +142,7 @@ assertThrows(RuntimeException.class, ...)
 | Input problem | Pearson | Covariance | Percentile |
 |---------------|---------|------------|------------|
 | OPTIONAL blank | unbound | unbound | unbound |
-| Truly empty inputs | NaN | 0.0 | **NPE** |
+| Truly empty inputs | NaN | 0.0 | **unbound** |
 | Identical values | NaN | 0.0 | **fine** |
 | Wrong type / string | unbound | — | unbound |
 | Rank outside 0..1 | — | — | throws |

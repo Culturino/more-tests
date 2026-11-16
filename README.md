@@ -11,11 +11,12 @@
 | **Upstream** | https://github.com/Kari3600/statistics-rdf4j |
 | **RDF4J (this checkout)** | `6.2.0-SNAPSHOT` via Kari GitHub Packages |
 
-Further docs:
+Further docs under **[reports/](reports/)**:
 
-- **[eda/](eda/)** — per-dataset EDA (counts, completeness, value kinds)
-- **[testing2.md](testing2.md)** — edge-case agendas #1–#4 findings (current suite)
-- **[post analysis/](post%20analysis/)** — plain-language line-by-line walkthrough of the new edge tests
+- **[reports/eda/](reports/eda/)** — per-dataset EDA (counts, completeness, value kinds)
+- **[reports/testing2.md](reports/testing2.md)** — edge-case agendas #1–#4 findings (current suite)
+- **[reports/post analysis/](reports/post%20analysis/)** — plain-language line-by-line walkthrough of the new edge tests
+- **[reports/edge-suite-report.md](reports/edge-suite-report.md)** — short findings + correctness verdict
 
 Handmade edge fixtures: **TTL sources** in [`src/test/resources/custom-data/`](src/test/resources/custom-data/), **table views** in [`custom-data/`](custom-data/) (see [§7.1](#71-custom-data-handmade-edge-fixtures)).
 
@@ -133,9 +134,11 @@ Factories are registered via Java SPI under:
 ```text
 more-tests/
 ├── README.md
-├── testing2.md
-├── eda/                      ← per-dataset EDA write-ups
-├── post analysis/            ← line-by-line edge-test walkthrough
+├── reports/                  ← EDA, edge findings, post-analysis walkthroughs
+│   ├── eda/
+│   ├── post analysis/
+│   ├── testing2.md
+│   └── edge-suite-report.md
 ├── custom-data/              ← markdown table views of edge fixtures (see §7.1)
 ├── pom.xml
 └── src/
@@ -248,7 +251,7 @@ mvn test "-Dtest=*EdgeTest"
 
 ## 9. Edge-case agenda (four points)
 
-Full narrative: **[testing2.md](testing2.md)**.
+Full narrative: **[reports/testing2.md](reports/testing2.md)**.
 
 ### Agenda #1 — Incomplete / null pairs
 
@@ -272,7 +275,7 @@ Dataset: [`tiny`](custom-data/tiny.md).
 | Slice | pearson | covariance | notes |
 |-------|---------|------------|--------|
 | empty / single / identical / constantX | **NaN** | **0.0** | degenerate |
-| empty percentile (no inputs) | — | — | **NPE** |
+| empty percentile (no inputs) | — | — | **unbound** (Kari `81550f1`) |
 | empty probability | — | — | **NaN** (0/0) |
 | `two` (minimal healthy line) | **1** | **1** | sanity check |
 
@@ -372,9 +375,10 @@ assertUnboundAggregate("custom-data/pairs.ttl", PREFIX + """
 
 | Doc | Contents |
 |-----|----------|
-| [eda/](eda/) | Per-dataset EDA write-ups |
-| [testing2.md](testing2.md) | Full write-up of agendas #1–#4 (current suite) |
-| [edge-suite-report.md](edge-suite-report.md) | Short findings + correctness verdict |
+| [reports/](reports/) | All analysis / edge reports |
+| [reports/eda/](reports/eda/) | Per-dataset EDA write-ups |
+| [reports/testing2.md](reports/testing2.md) | Full write-up of agendas #1–#4 (current suite) |
+| [reports/edge-suite-report.md](reports/edge-suite-report.md) | Short findings + correctness verdict |
 | [custom-data/](custom-data/) | Table views of handmade edge fixtures |
 | [src/test/resources/custom-data/](src/test/resources/custom-data/) | Handmade edge TTL sources |
 | [README.md](README.md) | This overview |

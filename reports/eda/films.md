@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Name** | Films |
-| **Source file** | [`films.ttl`](../src/test/resources/films.ttl) |
+| **Source file** | [`films.ttl`](../../src/test/resources/films.ttl) |
 | **Type** | Natural fixture (DBpedia-style scrape) |
 | **Primary class** | `dbo:Film` |
 | **Used by** | Happy-path pearson, covariance, percentile (runtime) |

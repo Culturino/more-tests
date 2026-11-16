@@ -19,18 +19,18 @@ These docs are for humans. They do not run tests. The real code lives under `src
 
 ## Related project docs
 
-- [README.md](../README.md) — project overview
+- [README.md](../../README.md) — project overview
 - [testing2.md](../testing2.md) — edge-case findings
 - [eda/](../eda/) — per-dataset EDA
-- Table views of handmade data: [custom-data/](../custom-data/)
+- Table views of handmade data: [custom-data/](../../custom-data/)
 
 ## Code under discussion
 
 | Class | Path |
 |-------|------|
-| `TestUtil` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) |
-| `PearsonEdgeTest` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java) |
-| `CovarianceEdgeTest` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java) |
-| `PercentileEdgeTest` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java) |
-| `ProbabilityEdgeTest` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java) |
-| `ChiSquaredEdgeTest` | [`../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java) |
+| `TestUtil` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/TestUtil.java) |
+| `PearsonEdgeTest` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java) |
+| `CovarianceEdgeTest` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/CovarianceEdgeTest.java) |
+| `PercentileEdgeTest` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/PercentileEdgeTest.java) |
+| `ProbabilityEdgeTest` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/ProbabilityEdgeTest.java) |
+| `ChiSquaredEdgeTest` | [`../../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/ChiSquaredEdgeTest.java) |

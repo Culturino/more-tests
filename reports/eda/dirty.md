@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Name** | Dirty |
-| **Source file** | [`dirty.ttl`](../src/test/resources/custom-data/dirty.ttl) |
-| **Table view** | [`custom-data/dirty.md`](../custom-data/dirty.md) |
+| **Source file** | [`dirty.ttl`](../../src/test/resources/custom-data/dirty.ttl) |
+| **Table view** | [`custom-data/dirty.md`](../../custom-data/dirty.md) |
 | **Type** | Handmade edge fixture |
 | **Primary class** | `ex:Item` |
 | **Used by** | Percentile / probability / pearson dirty edge tests |

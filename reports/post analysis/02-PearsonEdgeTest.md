@@ -1,11 +1,11 @@
 # 2 — `PearsonEdgeTest.java` (full walkthrough)
 
-Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java`](../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java)
+Source: [`src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java`](../../src/test/java/com/kari3600/me/statistics_rdf4j/PearsonEdgeTest.java)
 
 This class is **only** weird/edge tests for `stat:pearson` (correlation).  
 `@Test` on a method = JUnit runs that method when you `mvn test`.
 
-Fixture tables: [`custom-data/pairs.md`](../custom-data/pairs.md), [`tiny.md`](../custom-data/tiny.md), [`groups.md`](../custom-data/groups.md), [`dirty.md`](../custom-data/dirty.md).
+Fixture tables: [`custom-data/pairs.md`](../../custom-data/pairs.md), [`tiny.md`](../../custom-data/tiny.md), [`groups.md`](../../custom-data/groups.md), [`dirty.md`](../../custom-data/dirty.md).
 
 > Test method names match the Java `@Test` methods (result words stripped from both).
 
@@ -53,7 +53,7 @@ Used by the tiny-group tests later.
 
 ## Block — `pairs` (optional vs required)
 
-**Dataset:** [`pairs`](../custom-data/pairs.md)
+**Dataset:** [`pairs`](../../custom-data/pairs.md)
 
 | student | math | english |
 |---------|------|---------|
@@ -153,7 +153,7 @@ Analogy: empty room — don’t answer “average height = 170.”
 
 ## Block — cars & cities
 
-**Datasets:** [`cars.ttl`](../src/test/resources/cars.ttl), [`cities.ttl`](../src/test/resources/cities.ttl)
+**Datasets:** [`cars.ttl`](../../src/test/resources/cars.ttl), [`cities.ttl`](../../src/test/resources/cities.ttl)
 
 Same OPTIONAL idea on scraped data. Happy-path contrast: if the missing property is **required**, incompletes drop and pearson runs on completes only (`PearsonTest`).
 
@@ -183,7 +183,7 @@ From EDA: ~60 have weight, ~103 don’t → many `(length, blank)`.
 
 ## Block — tiny groups (`tiny`)
 
-**Dataset:** [`tiny`](../custom-data/tiny.md)
+**Dataset:** [`tiny`](../../custom-data/tiny.md)
 
 | case | Points | Role |
 |------|--------|------|
@@ -231,7 +231,7 @@ X never changes — correlation with X is meaningless.
 
 ## Block — richer queries (`groups`)
 
-**Dataset:** [`groups`](../custom-data/groups.md)
+**Dataset:** [`groups`](../../custom-data/groups.md)
 
 | Group | Pairs | Role |
 |-------|-------|------|
@@ -280,7 +280,7 @@ Start from healthy group A, then `FILTER(?math > 1000)` → nobody left.
 
 ## Block — dirty values (`dirty`)
 
-**Dataset:** [`dirty`](../custom-data/dirty.md)
+**Dataset:** [`dirty`](../../custom-data/dirty.md)
 
 ### `dirtyMixedNonNumeric_pearson`
 
