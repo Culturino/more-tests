@@ -56,11 +56,11 @@ Mountains with elevation and prominence — structurally complete main pair. Cle
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 1669 | Has both → survives a REQUIRED join |
+| **both** | 1669 | Has both |
 | **left_only** | 0 | Has `dbo:elevation`, missing `dbo:prominence` |
 | **right_only** | 0 | Has `dbo:prominence`, missing `dbo:elevation` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (1669 / 1669).
 
-Under REQUIRED patterns, effective n ≈ **1669**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![dbo:elevation × dbo:prominence scatter](charts/mountains__dbo_elevation__dbo_prominence.png)

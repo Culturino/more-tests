@@ -56,11 +56,11 @@ Universities with student counts and endowment. Main pair is complete but endowm
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 1236 | Has both → survives a REQUIRED join |
+| **both** | 1236 | Has both |
 | **left_only** | 0 | Has `dbo:numberOfStudents`, missing `dbo:endowment` |
 | **right_only** | 0 | Has `dbo:endowment`, missing `dbo:numberOfStudents` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (1236 / 1236).
 
-Under REQUIRED patterns, effective n ≈ **1236**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![dbo:numberOfStudents × dbo:endowment scatter](charts/universities__dbo_numberofstudents__dbo_endowment.png)

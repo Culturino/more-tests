@@ -49,11 +49,11 @@ Values for the main pair are **categories** (not continuous measurements).
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 120 | Has both → survives a REQUIRED join |
+| **both** | 120 | Has both |
 | **left_only** | 0 | Has `ex:gender`, missing `ex:order` |
 | **right_only** | 0 | Has `ex:order`, missing `ex:gender` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (120 / 120).
 
-Under REQUIRED patterns, effective n ≈ **120**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![ex:gender × ex:order scatter](charts/GFG_example__ex_gender__ex_order.png)

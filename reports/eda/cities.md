@@ -59,22 +59,23 @@ Cities with population and area always present; elevation often missing. Second-
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 843 | Has both → survives a REQUIRED join |
+| **both** | 843 | Has both |
 | **left_only** | 183 | Has `dbo:populationTotal`, missing `dbo:elevation` |
 | **right_only** | 0 | Has `dbo:elevation`, missing `dbo:populationTotal` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 82.2%** (843 / 1026).
 
-Under REQUIRED patterns, effective n ≈ **843**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
-
+![dbo:populationTotal × dbo:elevation scatter](charts/cities__dbo_populationtotal__dbo_elevation.png)
 ### Pair: `dbo:populationTotal` × `dbo:areaTotal`
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 1026 | Has both → survives a REQUIRED join |
+| **both** | 1026 | Has both |
 | **left_only** | 0 | Has `dbo:populationTotal`, missing `dbo:areaTotal` |
 | **right_only** | 0 | Has `dbo:areaTotal`, missing `dbo:populationTotal` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (1026 / 1026).
+
+![dbo:populationTotal × dbo:areaTotal scatter](charts/cities__dbo_populationtotal__dbo_areatotal.png)

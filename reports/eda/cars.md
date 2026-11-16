@@ -62,33 +62,35 @@ Automobiles with physical measurements and English labels. Main natural fixture 
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 60 | Has both → survives a REQUIRED join |
+| **both** | 60 | Has both |
 | **left_only** | 103 | Has `dbp:length`, missing `dbp:weight` |
 | **right_only** | 0 | Has `dbp:weight`, missing `dbp:length` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 36.8%** (60 / 163).
 
-Under REQUIRED patterns, effective n ≈ **60**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
-
+![dbp:length × dbp:weight scatter](charts/cars__dbp_length__dbp_weight.png)
 ### Pair: `dbp:length` × `dbp:wheelbase`
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 163 | Has both → survives a REQUIRED join |
+| **both** | 163 | Has both |
 | **left_only** | 0 | Has `dbp:length`, missing `dbp:wheelbase` |
 | **right_only** | 0 | Has `dbp:wheelbase`, missing `dbp:length` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (163 / 163).
 
+![dbp:length × dbp:wheelbase scatter](charts/cars__dbp_length__dbp_wheelbase.png)
 ### Pair: `dbp:length` × `dbp:width`
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 118 | Has both → survives a REQUIRED join |
+| **both** | 118 | Has both |
 | **left_only** | 45 | Has `dbp:length`, missing `dbp:width` |
 | **right_only** | 0 | Has `dbp:width`, missing `dbp:length` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 72.4%** (118 / 163).
+
+![dbp:length × dbp:width scatter](charts/cars__dbp_length__dbp_width.png)

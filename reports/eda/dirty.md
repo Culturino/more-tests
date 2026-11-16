@@ -73,11 +73,11 @@ Dirty / weird values: string-as-number, mixed types, boolean flags, multi-valued
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 3 | Has both → survives a REQUIRED join |
+| **both** | 3 | Has both |
 | **left_only** | 8 | Has `ex:val`, missing `ex:other` |
 | **right_only** | 0 | Has `ex:other`, missing `ex:val` |
 | **neither** | 4 | Has type but neither property |
 
 **Pair completeness: 20.0%** (3 / 15).
 
-Under REQUIRED patterns, effective n ≈ **3**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![ex:val × ex:other scatter](charts/dirty__ex_val__ex_other.png)

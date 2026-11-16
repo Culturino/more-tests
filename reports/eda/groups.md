@@ -68,11 +68,11 @@ Students in groups A–D for GROUP BY / FILTER / multi-aggregate edge tests (hea
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 7 | Has both → survives a REQUIRED join |
+| **both** | 7 | Has both |
 | **left_only** | 1 | Has `ex:math`, missing `ex:english` |
 | **right_only** | 1 | Has `ex:english`, missing `ex:math` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 77.8%** (7 / 9).
 
-Under REQUIRED patterns, effective n ≈ **7**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![ex:math × ex:english scatter](charts/groups__ex_math__ex_english.png)

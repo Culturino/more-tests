@@ -59,11 +59,11 @@ Films with budget and gross (always paired) and runtime often missing. Heavy rig
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 1620 | Has both → survives a REQUIRED join |
+| **both** | 1620 | Has both |
 | **left_only** | 0 | Has `dbo:budget`, missing `dbo:gross` |
 | **right_only** | 0 | Has `dbo:gross`, missing `dbo:budget` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (1620 / 1620).
 
-Under REQUIRED patterns, effective n ≈ **1620**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![dbo:budget × dbo:gross scatter](charts/films__dbo_budget__dbo_gross.png)

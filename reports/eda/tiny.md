@@ -70,11 +70,11 @@ Degenerate / tiny groups sliced by ex:case (empty, single, identical, constantX,
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 9 | Has both → survives a REQUIRED join |
+| **both** | 9 | Has both |
 | **left_only** | 1 | Has `ex:x`, missing `ex:y` |
 | **right_only** | 1 | Has `ex:y`, missing `ex:x` |
 | **neither** | 1 | Has type but neither property |
 
 **Pair completeness: 75.0%** (9 / 12).
 
-Under REQUIRED patterns, effective n ≈ **9**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![ex:x × ex:y scatter](charts/tiny__ex_x__ex_y.png)

@@ -56,11 +56,11 @@ Earthquake events with casualties and magnitude (plus often lat/long). Main pair
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 1069 | Has both → survives a REQUIRED join |
+| **both** | 1069 | Has both |
 | **left_only** | 0 | Has `dbp:casualties`, missing `dbp:magnitude` |
 | **right_only** | 0 | Has `dbp:magnitude`, missing `dbp:casualties` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (1069 / 1069).
 
-Under REQUIRED patterns, effective n ≈ **1069**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![dbp:casualties × dbp:magnitude scatter](charts/earthquakes__dbp_casualties__dbp_magnitude.png)

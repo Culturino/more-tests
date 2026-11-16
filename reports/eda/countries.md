@@ -92,22 +92,23 @@ Countries with development / inequality style numerics (HDI, Gini, and related f
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 132 | Has both → survives a REQUIRED join |
+| **both** | 132 | Has both |
 | **left_only** | 0 | Has `dbo:humanDevelopmentIndex`, missing `dbo:giniCoefficient` |
 | **right_only** | 0 | Has `dbo:giniCoefficient`, missing `dbo:humanDevelopmentIndex` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (132 / 132).
 
-Under REQUIRED patterns, effective n ≈ **132**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
-
+![dbo:humanDevelopmentIndex × dbo:giniCoefficient scatter](charts/countries__dbo_humandevelopmentindex__dbo_ginicoefficient.png)
 ### Pair: `dbp:hdi` × `dbp:gini`
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 132 | Has both → survives a REQUIRED join |
+| **both** | 132 | Has both |
 | **left_only** | 0 | Has `dbp:hdi`, missing `dbp:gini` |
 | **right_only** | 0 | Has `dbp:gini`, missing `dbp:hdi` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (132 / 132).
+
+![dbp:hdi × dbp:gini scatter](charts/countries__dbp_hdi__dbp_gini.png)

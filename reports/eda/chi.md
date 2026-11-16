@@ -52,11 +52,11 @@ Values for the main pair are **categories** (not continuous measurements).
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 4 | Has both → survives a REQUIRED join |
+| **both** | 4 | Has both |
 | **left_only** | 1 | Has `ex:gender`, missing `ex:order` |
 | **right_only** | 1 | Has `ex:order`, missing `ex:gender` |
 | **neither** | 1 | Has type but neither property |
 
 **Pair completeness: 57.1%** (4 / 7).
 
-Under REQUIRED patterns, effective n ≈ **4**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![ex:gender × ex:order scatter](charts/chi__ex_gender__ex_order.png)

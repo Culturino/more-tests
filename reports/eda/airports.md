@@ -56,11 +56,11 @@ Airports with elevation and primary runway length. Main pair is complete; runway
 
 | Bucket | Count | Meaning |
 |--------|------:|---------|
-| **both** | 979 | Has both → survives a REQUIRED join |
+| **both** | 979 | Has both |
 | **left_only** | 0 | Has `dbo:elevation`, missing `dbp:r1LengthF` |
 | **right_only** | 0 | Has `dbp:r1LengthF`, missing `dbo:elevation` |
 | **neither** | 0 | Has type but neither property |
 
 **Pair completeness: 100.0%** (979 / 979).
 
-Under REQUIRED patterns, effective n ≈ **979**. Under `OPTIONAL`, incompletes can enter as blanks → many numeric aggregates go **unbound**.
+![dbo:elevation × dbp:r1LengthF scatter](charts/airports__dbo_elevation__dbp_r1lengthf.png)
